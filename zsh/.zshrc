@@ -31,3 +31,7 @@ source ~/.zsh_aliases.zsh
 source ~/.zsh_completion_sources.zsh
 
 eval "$(starship init zsh)"
+
+# Run fastfetch every time a new shell starts
+fastfetch
+
