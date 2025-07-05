@@ -31,21 +31,32 @@ button {
 
 
 #workspaces button {
-    padding: 0 5px;
-    background-color: transparent;
-    color: @surface1;
+    color: @overlay1;
+    background: transparent;
+    border-radius: 6px;
+    padding: 0 6px;
 }
 
 #workspaces button:hover {
-    color: @red;
+    background-color: @surface0;
+    color: @mauve;
+    transition: all 0.3s ease;
 }
 
+
+#workspaces button.visible {
+    color: @blue;
+}
+
+
 #workspaces button.persistent {
-    color: @yellow;
+    color: @peach;
 }
 
 #workspaces button.active {
-    color: @lavender;
+    background: @surface1;
+    color: @mauve;
+    box-shadow: 0 0 4px rgba(203, 166, 247, 0.4); /* soft glow */
 }
 
 
@@ -54,11 +65,18 @@ button {
 }
 
 #workspaces button.empty {
-	color: @overlay0;
+    color: @overlay0;
 }
 
+
 #workspaces button.urgent {
-    background-color: @red;
+    background: @red;
+    color: @crust;
+}
+
+#workspaces button:not(.empty):not(.active) {
+    color: @subtext1;
+    font-weight: bold;
 }
 
 #mode {
@@ -80,7 +98,7 @@ button {
 #mode,
 #idle_inhibitor,
 #scratchpad,
-#custom-power
+#custom-power,
 #mpd {
     padding: 0 10px;
     color: @text;
@@ -203,3 +221,8 @@ label:focus {
     -gtk-icon-effect: highlight;
     background-color: @red;
 }
+
+#clock, #pulseaudio {
+    box-shadow: 0 0 5px rgba(203, 166, 247, 0.3); /* @mauve */
+}
+

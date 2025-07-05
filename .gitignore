@@ -6,3 +6,7 @@
 btop/.config/btop/*.log
 background
 hypr/.config/hypr/background
+
+zsh/.config/zsh/plugins/zsh-autosuggestions/
+zsh/.config/zsh/plugins/zsh-syntax-highlighting/
+
