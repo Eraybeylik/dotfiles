@@ -6,7 +6,7 @@
 
 </div>
 
-## 📸 Kurulum
+## Kurulum
 ```bash
 # 1. Repoyu klonla
 git clone git@github.com:Eraybeylik/dotfiles.git ~/.dotfiles
