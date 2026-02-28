@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏠 xera's dotfiles
+# xera's dotfiles
 
 **Arch Linux · Hyprland · Catppuccin Mocha · Nvidia**
 
@@ -20,7 +20,7 @@ chmod +x install.sh
 sudo reboot
 ```
 
-## 📦 İçerik
+## İçerik
 
 | Config | Açıklama |
 |--------|----------|
@@ -35,7 +35,7 @@ sudo reboot
 | `starship` | Shell prompt |
 | `zsh` | Shell + aliases |
 
-## ⌨️ Keybindler
+## Keybindler
 
 | Kısayol | Aksiyon |
 |---------|---------|
@@ -52,8 +52,4 @@ sudo reboot
 | `SUPER + P` | Renk seçici |
 | `Print` | Ekran görüntüsü |
 
-## 🖥️ Donanım
-
-- GPU: Nvidia (driver: nvidia-dkms)
-- Çift monitör: HDMI-A-1 + eDP-1
 
