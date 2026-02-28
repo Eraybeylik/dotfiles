@@ -84,6 +84,7 @@ PACMAN_PKGS=(
 
     # Screenshot
     grimblast-git
+    satty
 
     # Dosya yöneticisi
     thunar
@@ -133,9 +134,7 @@ AUR_PKGS=(
     google-chrome
     obsidian
     visual-studio-code-bin
-    satty                        # screenshot editör
     catppuccin-gtk-theme-mocha
-    catppuccin-mocha-blue-standard-git
 )
 
 info "AUR paketleri kuruluyor..."
