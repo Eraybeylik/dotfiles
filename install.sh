@@ -3,6 +3,7 @@
 # ============================================================
 #  xera's Dotfiles - Fresh Install Script
 #  Arch Linux + Hyprland + Nvidia
+#  (Gnome kurulu sistemden Hyprland'a geçiş)
 # ============================================================
 
 set -e
@@ -31,13 +32,14 @@ step "1. Sistem güncelleme"
 # ============================================================
 info "Paketler güncelleniyor..."
 sudo pacman -Syu --noconfirm
+success "Sistem güncellendi"
 
 # ============================================================
 step "2. AUR helper (yay) kurulumu"
 # ============================================================
 if ! command -v yay &>/dev/null; then
     info "yay kuruluyor..."
-    sudo pacman -S --noconfirm git base-devel
+    sudo pacman -S --noconfirm --needed git base-devel
     git clone https://aur.archlinux.org/yay.git /tmp/yay
     cd /tmp/yay && makepkg -si --noconfirm
     cd ~
@@ -83,7 +85,6 @@ PACMAN_PKGS=(
     brightnessctl
 
     # Screenshot
-    grimblast-git
     satty
 
     # Dosya yöneticisi
@@ -116,11 +117,6 @@ PACMAN_PKGS=(
     curl
     wget
     unzip
-
-    # Nvidia
-    nvidia-dkms
-    nvidia-utils
-    libva-nvidia-driver
 )
 
 info "Pacman paketleri kuruluyor..."
@@ -131,6 +127,7 @@ success "Pacman paketleri kuruldu"
 step "4. AUR paketleri"
 # ============================================================
 AUR_PKGS=(
+    grimblast-git       # Screenshot (AUR - pacman listesinde değil!)
     google-chrome
     obsidian
     visual-studio-code-bin
@@ -142,7 +139,24 @@ yay -S --noconfirm --needed "${AUR_PKGS[@]}"
 success "AUR paketleri kuruldu"
 
 # ============================================================
-step "5. Dotfiles kurulumu"
+step "5. GDM → Hyprland oturumu"
+# ============================================================
+# archinstall + Gnome kurulumunda GDM geliyor.
+# GDM Wayland destekler, Hyprland session'ı otomatik görünür.
+# Sadece Gnome'un Wayland'ı disable etmediğinden emin olalım.
+
+info "GDM Wayland kontrolü yapılıyor..."
+GDM_CUSTOM="/etc/gdm/custom.conf"
+if [ -f "$GDM_CUSTOM" ]; then
+    # WaylandEnable=false satırı varsa düzelt
+    sudo sed -i 's/^WaylandEnable=false/WaylandEnable=true/' "$GDM_CUSTOM"
+    success "GDM Wayland aktif"
+else
+    warn "GDM custom.conf bulunamadı, varsayılan ayarlar kullanılacak"
+fi
+
+# ============================================================
+step "6. Dotfiles kurulumu"
 # ============================================================
 if [ ! -d "$DOTFILES_DIR" ]; then
     info "Dotfiles klonlanıyor..."
@@ -160,12 +174,13 @@ stow hyprland waybar kitty dunst tofi wlogout btop starship gtk-3.0 gtk-4.0 nvim
 success "Dotfiles bağlandı"
 
 # ============================================================
-step "6. Wallpaper dizini"
+step "7. Wallpaper dizini"
 # ============================================================
 mkdir -p ~/Pictures/Wallpapers
+success "Wallpaper dizini oluşturuldu"
 
 # ============================================================
-step "7. Zsh varsayılan shell"
+step "8. Zsh varsayılan shell"
 # ============================================================
 if [ "$SHELL" != "$(which zsh)" ]; then
     info "Zsh varsayılan shell yapılıyor..."
@@ -176,16 +191,17 @@ else
 fi
 
 # ============================================================
-step "8. Servisler"
+step "9. Servisler"
 # ============================================================
 info "Pipewire servisleri etkinleştiriliyor..."
 systemctl --user enable --now pipewire pipewire-pulse wireplumber
-success "Servisler başlatıldı"
+success "Pipewire başlatıldı"
 
 # ============================================================
-step "9. XDG kullanıcı dizinleri"
+step "10. XDG kullanıcı dizinleri"
 # ============================================================
 xdg-user-dirs-update
+success "XDG dizinleri güncellendi"
 
 # ============================================================
 echo ""
@@ -195,5 +211,11 @@ echo -e "${GREEN}============================================${NC}"
 echo ""
 echo -e "${YELLOW}Sonraki adımlar:${NC}"
 echo "  1. Sistemi yeniden başlat: sudo reboot"
-echo "  2. Hyprland'a giriş yap"
+echo "  2. GDM ekranında kullanıcını seç"
+echo "  3. Sağ alttaki oturum menüsünden 'Hyprland' seç"
+echo "  4. Giriş yap"
+echo ""
+echo -e "${CYAN}Sorun yaşarsan:${NC}"
+echo "  - Siyah ekran → TTY2'ye geç (Ctrl+Alt+F2) ve loglara bak:"
+echo "    journalctl -b -p err"
 echo ""
