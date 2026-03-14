@@ -1,14 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # ============================================================
-#  xera's Dotfiles - Fresh Install Script
-#  Arch Linux + Hyprland + Nvidia
-#  (Gnome kurulu sistemden Hyprland'a geçiş)
+#  xera's full Arch install script
+#  Fresh install -> packages + services + dotfiles + GTK fixes
 # ============================================================
 
-set -e
+set -Eeuo pipefail
 
-# Renkler
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -22,200 +20,307 @@ warn()    { echo -e "${YELLOW}[WARN]${NC} $1"; }
 error()   { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 step()    { echo -e "\n${CYAN}==>${NC} $1"; }
 
-# Root kontrolü
-[ "$EUID" -eq 0 ] && error "Bu scripti root olarak çalıştırma!"
+trap 'error "Script beklenmedik şekilde durdu. Son komut hata verdi."' ERR
 
-DOTFILES_DIR="$HOME/.dotfiles"
+[ "${EUID}" -eq 0 ] && error "Bu scripti root olarak çalıştırma!"
 
-# ============================================================
+DOTFILES_DIR="${HOME}/.dotfiles"
+ZPROFILE="${HOME}/.zprofile"
+
+# ------------------------------------------------------------
+# Paket listeleri
+# ------------------------------------------------------------
+PACMAN_PKGS=(
+  amd-ucode
+  base
+  base-devel
+  bat
+  blueman
+  bluez
+  bluez-utils
+  bridge-utils
+  brightnessctl
+  btop
+  burpsuite
+  cliphist
+  dnsmasq
+  docker
+  docker-buildx
+  docker-compose
+  dosfstools
+  dunst
+  efibootmgr
+  egl-wayland
+  fd
+  fuse3
+  git
+  grub
+  gst-plugin-pipewire
+  gtk3
+  gtk4
+  gvfs
+  hypridle
+  hyprland
+  hyprlock
+  hyprpicker
+  kitty
+  kvantum
+  less
+  libpulse
+  libvirt
+  linux
+  linux-firmware
+  linux-headers
+  mtools
+  nano
+  neovim
+  network-manager-applet
+  networkmanager
+  noto-fonts
+  noto-fonts-emoji
+  nvidia-open-dkms
+  nvidia-utils
+  nwg-look
+  os-prober
+  pamixer
+  pavucontrol
+  pipewire
+  pipewire-alsa
+  pipewire-jack
+  pipewire-pulse
+  playerctl
+  polkit-kde-agent
+  qemu-audio-spice
+  qemu-base
+  qemu-chardev-spice
+  qemu-full
+  qemu-hw-display-qxl
+  qemu-ui-spice-app
+  qemu-ui-spice-core
+  qt5-wayland
+  qt5ct
+  qt6-wayland
+  qt6ct
+  ripgrep
+  satty
+  sddm
+  sof-firmware
+  speedtest-cli
+  spice-vdagent
+  starship
+  stow
+  sudo
+  swww
+  thunar
+  thunar-archive-plugin
+  tofi
+  ttf-fira-code
+  ttf-fira-sans
+  ttf-nerd-fonts-symbols
+  unzip
+  virt-manager
+  waybar
+  wget
+  wireguard-tools
+  wireplumber
+  wl-clipboard
+  wpa_supplicant
+  xdg-desktop-portal-hyprland
+  xdg-user-dirs
+  zoxide
+  zram-generator
+  zsh
+
+  # GTK / GSettings / icon / mime fix paketleri
+  adwaita-icon-theme
+  gdk-pixbuf2
+  glib2
+  gsettings-desktop-schemas
+  hicolor-icon-theme
+  librsvg
+  shared-mime-info
+  xdg-desktop-portal-gtk
+)
+
+AUR_PKGS=(
+  catppuccin-gtk-theme-mocha
+  cloudflare-warp-bin
+  google-chrome
+  grimblast-git
+  obsidian
+  pycharm
+  vesktop-bin
+  visual-studio-code-bin
+  wlogout
+)
+
+# ------------------------------------------------------------
 step "1. Sistem güncelleme"
-# ============================================================
-info "Paketler güncelleniyor..."
+# ------------------------------------------------------------
+info "Sistem güncelleniyor..."
 sudo pacman -Syu --noconfirm
 success "Sistem güncellendi"
 
-# ============================================================
-step "2. AUR helper (yay) kurulumu"
-# ============================================================
-if ! command -v yay &>/dev/null; then
-    info "yay kuruluyor..."
-    sudo pacman -S --noconfirm --needed git base-devel
-    git clone https://aur.archlinux.org/yay.git /tmp/yay
-    cd /tmp/yay && makepkg -si --noconfirm
-    cd ~
-    success "yay kuruldu"
+# ------------------------------------------------------------
+step "2. yay kurulumu"
+# ------------------------------------------------------------
+if ! command -v yay >/dev/null 2>&1; then
+  info "yay kuruluyor..."
+  sudo pacman -S --noconfirm --needed git base-devel
+  rm -rf /tmp/yay
+  git clone https://aur.archlinux.org/yay.git /tmp/yay
+  (
+    cd /tmp/yay
+    makepkg -si --noconfirm
+  )
+  success "yay kuruldu"
 else
-    success "yay zaten mevcut"
+  success "yay zaten kurulu"
 fi
 
-# ============================================================
-step "3. Temel sistem paketleri"
-# ============================================================
-PACMAN_PKGS=(
-    # Hyprland ekosistemi
-    hyprland
-    hyprlock
-    hypridle
-    hyprpicker
-    xdg-desktop-portal-hyprland
-    xdg-user-dirs
-
-    # Wayland araçları
-    waybar
-    dunst
-    tofi
-    wlogout
-    swww
-    wl-clipboard
-    cliphist
-
-    # Terminal & Shell
-    kitty
-    zsh
-    starship
-
-    # Ses & Medya
-    pamixer
-    pipewire
-    pipewire-pulse
-    wireplumber
-    playerctl
-
-    # Parlaklık
-    brightnessctl
-
-    # Screenshot
-    satty
-
-    # Dosya yöneticisi
-    thunar
-    thunar-archive-plugin
-    gvfs
-
-    # Polkit
-    polkit-kde-agent
-
-    # Tema & Görünüm
-    kvantum
-    qt5ct
-    qt6ct
-    nwg-look
-    gtk3
-    gtk4
-
-    # Fontlar
-    ttf-fira-code
-    ttf-fira-sans
-    noto-fonts
-    noto-fonts-emoji
-    ttf-nerd-fonts-symbols
-
-    # Sistem araçları
-    btop
-    stow
-    git
-    curl
-    wget
-    unzip
-)
-
+# ------------------------------------------------------------
+step "3. Pacman paketleri"
+# ------------------------------------------------------------
 info "Pacman paketleri kuruluyor..."
 sudo pacman -S --noconfirm --needed "${PACMAN_PKGS[@]}"
 success "Pacman paketleri kuruldu"
 
-# ============================================================
+# ------------------------------------------------------------
 step "4. AUR paketleri"
-# ============================================================
-AUR_PKGS=(
-    grimblast-git       # Screenshot (AUR - pacman listesinde değil!)
-    google-chrome
-    obsidian
-    visual-studio-code-bin
-    catppuccin-gtk-theme-mocha
-)
-
+# ------------------------------------------------------------
 info "AUR paketleri kuruluyor..."
 yay -S --noconfirm --needed "${AUR_PKGS[@]}"
 success "AUR paketleri kuruldu"
 
-# ============================================================
-step "5. GDM → Hyprland oturumu"
-# ============================================================
-# archinstall + Gnome kurulumunda GDM geliyor.
-# GDM Wayland destekler, Hyprland session'ı otomatik görünür.
-# Sadece Gnome'un Wayland'ı disable etmediğinden emin olalım.
+# ------------------------------------------------------------
+step "5. Servisler"
+# ------------------------------------------------------------
+info "NetworkManager etkinleştiriliyor..."
+sudo systemctl enable --now NetworkManager
 
-info "GDM Wayland kontrolü yapılıyor..."
-GDM_CUSTOM="/etc/gdm/custom.conf"
-if [ -f "$GDM_CUSTOM" ]; then
-    # WaylandEnable=false satırı varsa düzelt
-    sudo sed -i 's/^WaylandEnable=false/WaylandEnable=true/' "$GDM_CUSTOM"
-    success "GDM Wayland aktif"
-else
-    warn "GDM custom.conf bulunamadı, varsayılan ayarlar kullanılacak"
+info "Bluetooth etkinleştiriliyor..."
+sudo systemctl enable --now bluetooth
+
+info "Docker etkinleştiriliyor..."
+sudo systemctl enable --now docker
+
+info "SDDM etkinleştiriliyor..."
+sudo systemctl enable sddm
+
+info "PipeWire kullanıcı servisleri etkinleştiriliyor..."
+systemctl --user enable --now pipewire pipewire-pulse wireplumber || true
+
+success "Servisler ayarlandı"
+
+# ------------------------------------------------------------
+step "6. Kullanıcı grup üyelikleri"
+# ------------------------------------------------------------
+info "Kullanıcı gerekli gruplara ekleniyor..."
+sudo usermod -aG libvirt,docker "${USER}" || true
+success "Grup üyelikleri ayarlandı (yeniden giriş gerekli)"
+
+# ------------------------------------------------------------
+step "7. GTK / schema / mime / pixbuf düzeltmeleri"
+# ------------------------------------------------------------
+info "Schema ve cache'ler güncelleniyor..."
+sudo glib-compile-schemas /usr/share/glib-2.0/schemas || true
+sudo update-mime-database /usr/share/mime || true
+sudo gdk-pixbuf-query-loaders --update-cache || true
+success "GTK cache'leri güncellendi"
+
+# ------------------------------------------------------------
+step "8. XDG_DATA_DIRS düzeltmesi"
+# ------------------------------------------------------------
+if [ -f "${ZPROFILE}" ]; then
+  cp "${ZPROFILE}" "${ZPROFILE}.bak.$(date +%s)"
 fi
 
-# ============================================================
-step "6. Dotfiles kurulumu"
-# ============================================================
-if [ ! -d "$DOTFILES_DIR" ]; then
-    info "Dotfiles klonlanıyor..."
-    git clone git@github.com:Eraybeylik/dotfiles.git "$DOTFILES_DIR"
+if grep -q '^export XDG_DATA_DIRS=' "${ZPROFILE}" 2>/dev/null; then
+  sed -i 's|^export XDG_DATA_DIRS=.*$|export XDG_DATA_DIRS="/usr/local/share:/usr/share"|' "${ZPROFILE}"
 else
-    info "Dotfiles zaten mevcut, güncelleniyor..."
-    cd "$DOTFILES_DIR" && git pull
+  {
+    echo ""
+    echo "# GTK / GSettings / Waybar fix"
+    echo 'export XDG_DATA_DIRS="/usr/local/share:/usr/share"'
+  } >> "${ZPROFILE}"
+fi
+success "~/.zprofile güncellendi"
+
+# ------------------------------------------------------------
+step "9. XDG kullanıcı dizinleri"
+# ------------------------------------------------------------
+xdg-user-dirs-update || true
+success "XDG dizinleri oluşturuldu"
+
+# ------------------------------------------------------------
+step "10. Dotfiles"
+# ------------------------------------------------------------
+if [ ! -d "${DOTFILES_DIR}" ]; then
+  info "Dotfiles klonlanıyor..."
+  if ssh -T git@github.com >/dev/null 2>&1; then
+    git clone git@github.com:Eraybeylik/dotfiles.git "${DOTFILES_DIR}"
+  else
+    warn "SSH yok, HTTPS ile klonlanıyor..."
+    git clone https://github.com/Eraybeylik/dotfiles.git "${DOTFILES_DIR}"
+  fi
+else
+  info "Dotfiles zaten mevcut, güncelleniyor..."
+  (
+    cd "${DOTFILES_DIR}"
+    git pull --ff-only || true
+  )
 fi
 
-cd "$DOTFILES_DIR"
-
-info "Symlink'ler oluşturuluyor..."
-stow hyprland waybar kitty dunst tofi wlogout btop starship gtk-3.0 gtk-4.0 nvim zsh wallpapers assets
-
-success "Dotfiles bağlandı"
-
-# ============================================================
-step "7. Wallpaper dizini"
-# ============================================================
-mkdir -p ~/Pictures/Wallpapers
-success "Wallpaper dizini oluşturuldu"
-
-# ============================================================
-step "8. Zsh varsayılan shell"
-# ============================================================
-if [ "$SHELL" != "$(which zsh)" ]; then
-    info "Zsh varsayılan shell yapılıyor..."
-    chsh -s "$(which zsh)"
-    success "Zsh ayarlandı (yeniden giriş gerekli)"
+if [ -d "${DOTFILES_DIR}" ]; then
+  cd "${DOTFILES_DIR}"
+  info "Stow ile dotfiles bağlanıyor..."
+  for pkg in hyprland waybar kitty dunst tofi wlogout btop starship gtk-3.0 gtk-4.0 nvim zsh wallpapers assets; do
+    [ -d "${pkg}" ] && stow "${pkg}" || true
+  done
+  success "Dotfiles bağlandı"
 else
-    success "Zsh zaten varsayılan"
+  warn "Dotfiles dizini bulunamadı, stow atlandı"
 fi
 
-# ============================================================
-step "9. Servisler"
-# ============================================================
-info "Pipewire servisleri etkinleştiriliyor..."
-systemctl --user enable --now pipewire pipewire-pulse wireplumber
-success "Pipewire başlatıldı"
+# ------------------------------------------------------------
+step "11. Wallpaper dizini"
+# ------------------------------------------------------------
+mkdir -p "${HOME}/Pictures/Wallpapers"
+success "Wallpaper dizini hazır"
 
-# ============================================================
-step "10. XDG kullanıcı dizinleri"
-# ============================================================
-xdg-user-dirs-update
-success "XDG dizinleri güncellendi"
+# ------------------------------------------------------------
+step "12. Varsayılan shell"
+# ------------------------------------------------------------
+if [ "${SHELL}" != "$(command -v zsh)" ]; then
+  info "Varsayılan shell zsh yapılıyor..."
+  chsh -s "$(command -v zsh)"
+  success "Zsh ayarlandı (yeniden giriş gerekli)"
+else
+  success "Zsh zaten varsayılan"
+fi
 
-# ============================================================
+# ------------------------------------------------------------
+step "13. Son kontroller"
+# ------------------------------------------------------------
+for cmd in waybar pavucontrol blueman-manager nmtui brightnessctl playerctl docker virt-manager hyprland; do
+  if command -v "${cmd}" >/dev/null 2>&1; then
+    success "${cmd} bulundu"
+  else
+    warn "${cmd} bulunamadı"
+  fi
+done
+
 echo ""
 echo -e "${GREEN}============================================${NC}"
-echo -e "${GREEN}  Kurulum tamamlandı! 🎉${NC}"
+echo -e "${GREEN}  Kurulum tamamlandı!${NC}"
 echo -e "${GREEN}============================================${NC}"
 echo ""
 echo -e "${YELLOW}Sonraki adımlar:${NC}"
-echo "  1. Sistemi yeniden başlat: sudo reboot"
-echo "  2. GDM ekranında kullanıcını seç"
-echo "  3. Sağ alttaki oturum menüsünden 'Hyprland' seç"
-echo "  4. Giriş yap"
+echo "  1. reboot at"
+echo "  2. giriş ekranında Hyprland seç"
+echo "  3. yeniden giriş yaptıktan sonra grup üyelikleri aktif olur"
 echo ""
-echo -e "${CYAN}Sorun yaşarsan:${NC}"
-echo "  - Siyah ekran → TTY2'ye geç (Ctrl+Alt+F2) ve loglara bak:"
-echo "    journalctl -b -p err"
-echo ""
+echo -e "${CYAN}Not:${NC}"
+echo "  - Waybar / GTK / GSettings bozulursa ~/.zprofile içindeki XDG_DATA_DIRS satırını kontrol et"
+echo "  - Docker için yeniden giriş gerekebilir"
+echo "  - Libvirt için virt-manager kullanmadan önce yeniden giriş yap"
