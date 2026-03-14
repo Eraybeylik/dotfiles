@@ -1,37 +1,51 @@
-// -*- mode: jsonc -*-
 {
-  // "layer": "top", // Waybar at top layer
-  // "position": "bottom", // Waybar position (top|bottom|left|right)
-  // "height": 30, // Waybar height (to be removed for auto height)
-  // "width": 1280, // Waybar width
-  // "spacing": 4, // Gaps between modules (4px)
-  // Choose the order of the modules
-  "margin-top": 5,
-  "modules-center": [
-    "hyprland/workspaces"
-    // "hyprland/mode",
-    // "sway/scratchpad",
-    // "custom/media"
-  ],
+  "layer": "top",
+  "position": "top",
+  "height": 34,
+  "margin-top": 6,
+  "margin-left": 10,
+  "margin-right": 10,
+  "spacing": 0,
+
   "modules-left": [
     "clock",
-    "tray"
+    "tray",
+    "custom/media-prev",
+    "custom/media-play",
+    "custom/media-next",
+    "custom/media",
   ],
+
+  "modules-center": [
+    "hyprland/workspaces"
+  ],
+
   "modules-right": [
     "pulseaudio",
     "backlight",
     "cpu",
     "memory",
     "battery",
+    "bluetooth",
     "network",
     "custom/power"
   ],
-  // Modules configuration
+
+  "clock": {
+    "format": "󰥔 {:%H:%M}",
+    "format-alt": " {:%d.%m.%Y}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+  },
+
+  "tray": {
+    "spacing": 8
+  },
+
   "hyprland/workspaces": {
-    "disable-scroll": true,
+    "disable-scroll": false,
     "all-outputs": true,
-    "on-click": "activate",
     "warp-on-scroll": false,
+    "on-click": "activate",
     "format": "{icon}",
     "format-icons": {
       "1": "",
@@ -44,165 +58,126 @@
       "8": "",
       "9": "",
       "active": "",
-      "urgent": "",
-      "persistent": "",
-      "focused": "",
-      "default": ""
+      "default": "",
+      "empty": ""
     },
     "persistent-workspaces": {
-      "*": 9,
-      "DP-1": 9
+      "*": 9
     }
   },
-  "sway/mode": {
-    "format": "<span style=\"italic\">{}</span>"
+
+  "custom/media-prev": {
+    "format": "",
+    "tooltip": false,
+    "exec-if": "playerctl status >/dev/null 2>&1",
+    "exec": "echo '{\"text\":\"\"}'",
+    "return-type": "json",
+    "on-click": "playerctl previous",
+    "interval": 2
   },
-  "sway/scratchpad": {
-    "format": "{icon} {count}",
-    "show-empty": false,
-    "format-icons": [
-      "",
-      ""
-    ],
-    "tooltip": true,
-    "tooltip-format": "{app}: {title}"
+
+  "custom/media-play": {
+    "format": "{}",
+    "tooltip": false,
+    "exec-if": "playerctl status >/dev/null 2>&1",
+    "exec": "playerctl status 2>/dev/null | grep -q Playing && echo '{\"text\":\"\"}' || echo '{\"text\":\"\"}'",
+    "return-type": "json",
+    "on-click": "playerctl play-pause",
+    "interval": 2
   },
-  "mpd": {
-    "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
-    "format-disconnected": "Disconnected ",
-    "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
-    "unknown-tag": "N/A",
-    "interval": 5,
-    "consume-icons": {
-      "on": " "
-    },
-    "random-icons": {
-      "off": "<span color=\"#f53c3c\"></span> ",
-      "on": " "
-    },
-    "repeat-icons": {
-      "on": " "
-    },
-    "single-icons": {
-      "on": "1 "
-    },
-    "state-icons": {
-      "paused": "",
-      "playing": ""
-    },
-    "tooltip-format": "MPD (connected)",
-    "tooltip-format-disconnected": "MPD (disconnected)"
+
+  "custom/media-next": {
+    "format": "",
+    "tooltip": false,
+    "exec-if": "playerctl status >/dev/null 2>&1",
+    "exec": "echo '{\"text\":\"\"}'",
+    "return-type": "json",
+    "on-click": "playerctl next",
+    "interval": 2
   },
-  "idle_inhibitor": {
-    "format": "{icon}",
-    "format-icons": {
-      "activated": "",
-      "deactivated": ""
-    }
-  },
-  "tray": {
-    // "icon-size": 21,
-    "spacing": 10,
-    // "icons": {
-    //   "blueman": "bluetooth",
-    //   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
-    // }
-  },
-  "clock": {
-    // "timezone": "America/New_York",
-    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-    "format-alt": "{:%Y-%m-%d}"
-  },
-  "cpu": {
-    "format": " {usage}%",
+
+  "custom/media": {
+    "format": "{}",
+    "return-type": "json",
+    "max-length": 24,
+    "exec-if": "playerctl status >/dev/null 2>&1",
+    "exec": "playerctl metadata --format '{\"text\":\" {{artist}} - {{title}}\"}' 2>/dev/null",
+    "on-click": "playerctl play-pause",
+    "on-scroll-up": "playerctl previous",
+    "on-scroll-down": "playerctl next",
+    "interval": 2,
     "tooltip": false
   },
-  "memory": {
-    "format": "  {}%"
+
+  "pulseaudio": {
+    "scroll-step": 5,
+    "format": " {volume}%",
+    "format-bluetooth": " {volume}%",
+    "format-bluetooth-muted": "󰝟 ",
+    "format-muted": "󰝟",
+    "on-click": "pavucontrol",
+    "on-click-right": "pamixer -t",
+    "tooltip": false
   },
+
   "backlight": {
-    // "device": "acpi_video1",
-    "format": "{percent}% {icon}",
-    "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    ]
+    "format": "󰃠 {percent}%",
+    "on-scroll-up": "brightnessctl set +5%",
+    "on-scroll-down": "brightnessctl set 5%-",
+    "tooltip": false
   },
+
+  "cpu": {
+    "format": " {usage}%",
+    "tooltip": false,
+    "on-click": "kitty -e btop"
+  },
+
+  "memory": {
+    "format": " {}%",
+    "tooltip": false,
+    "on-click": "kitty -e btop"
+  },
+
   "battery": {
     "states": {
-      // "good": 95,
       "warning": 30,
       "critical": 15
     },
-    "format": "{icon}  {capacity}%",
-    "format-full": "{icon}  {capacity}%",
+    "format": "{icon} {capacity}%",
+    "format-full": "{icon} {capacity}%",
     "format-charging": "󱐋 {capacity}%",
-    "format-plugged": "{capacity}% ",
-    "format-alt": "{icon}  {time}",
-    // "format-good": "", // An empty format will hide the module
-    // "format-full": "",
+    "format-plugged": " {capacity}%",
     "format-icons": [
       "",
       "",
       "",
       "",
       ""
-    ]
-  },
-  "battery#bat2": {
-    "bat": "BAT2"
-  },
-  "power-profiles-daemon": {
-    "format": "{icon}",
-    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
-    "tooltip": true,
-    "format-icons": {
-      "default": "",
-      "performance": "",
-      "balanced": "",
-      "power-saver": ""
-    }
-  },
-  "network": {
-    // "interface": "wlp2*", // (Optional) To force the use of this interface
-    "format-wifi": "  {essid} ",
-    "format-ethernet": "󰈀 {essid}",
-    "tooltip-format": "{ifname} via {gwaddr}",
-    "format-linked": "{ifname} (No IP)",
-    "format-disconnected": "⚠ Disconnected ",
-    "format-alt": "{essid}/{ifname}: {ipaddr}/{cidr}"
-  },
-  "pulseaudio": {
-    // "scroll-step": 1, // %, can be a float
-    "format": "{icon}  {volume}%",
-    "format-bluetooth": "{volume}% {icon} {format_source}",
-    "format-bluetooth-muted": " {icon} {format_source}",
-    "format-muted": " ",
-    "format-icons": {
-      "headphone": "",
-      "hands-free": "",
-      "headset": "",
-      "phone": "",
-      "portable": "",
-      "car": "",
-      "default": [
-        "",
-        "",
-        ""
-      ]
-    },
-    "on-click": "pavucontrol"
-  },
-  "custom/power": {
-    "format": "⏻ ",
-    "on-click": "wlogout",
+    ],
     "tooltip": false
   },
+
+  "bluetooth": {
+    "format": " {status}",
+    "format-connected": " on",
+    "format-connected-battery": " {device_battery_percentage}%",
+    "on-click": "blueman-manager",
+    "tooltip-format": "{controller_alias}\n{num_connections} bağlı cihaz"
+  },
+
+  "network": {
+    "format-wifi": "󰤨 {essid}",
+    "format-ethernet": "󰈀 {ifname}",
+    "format-linked": "󰈀 No IP",
+    "format-disconnected": "󰤭 Disconnected",
+    "tooltip-format": "{ifname} via {gwaddr}",
+    "on-click": "kitty -e nmtui"
+  },
+
+  "custom/power": {
+    "format": "",
+    "on-click": "wlogout",
+    "tooltip": false
+  }
 }

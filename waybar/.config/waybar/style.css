@@ -1,19 +1,18 @@
 @import "mocha.css";
 
 * {
-    /* `otf-font-awesome` is required to be installed for icons */
-    font-family: JetBrainsMono Nerd Font;
-    font-size: 1.003em;
-    font-weight: bold;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 14px;
+    font-weight: 700;
+    min-height: 0;
 }
 
 window#waybar {
-	background-color: transparent;
-    /* background-color: @base; */
-    /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
+    background: rgba(24, 24, 37, 0.72);
     color: @text;
-    transition-property: background-color;
-    transition-duration: .5s;
+    border: 1px solid rgba(180, 190, 254, 0.16);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
 }
 
 window#waybar.hidden {
@@ -21,19 +20,83 @@ window#waybar.hidden {
 }
 
 button {
-    /* Use box-shadow instead of border so the text isn't offset */
-    box-shadow: inset 0 -3px transparent;
-    /* Avoid rounded borders under each button name */
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 0;
+    min-width: 0;
+    background: transparent;
+}
+
+#clock,
+#tray,
+#custom-media-prev,
+#custom-media-play,
+#custom-media-next,
+#custom-media,
+#workspaces,
+#pulseaudio,
+#backlight,
+#cpu,
+#memory,
+#battery,
+#bluetooth,
+#network,
+#custom-power {
+    background: transparent;
+    padding: 0 10px;
+    margin: 0;
     border: none;
     border-radius: 0;
 }
 
+#clock {
+    color: @lavender;
+    padding-left: 14px;
+    padding-right: 12px;
+    border-right: 1px solid rgba(180,190,254,0.15);
+}
 
+#tray {
+    color: @text;
+    padding-right: 10px;
+}
+
+/* Müzik */
+#custom-media-prev,
+#custom-media-play,
+#custom-media-next {
+    color: @lavender;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+#custom-media-prev:hover,
+#custom-media-play:hover,
+#custom-media-next:hover,
+#custom-media:hover {
+    color: @rosewater;
+}
+
+#custom-media {
+    color: @lavender;
+    min-width: 150px;
+    padding-left: 6px;
+    padding-right: 12px;
+}
+
+#workspaces {
+    background: transparent;
+    padding-left: 6px;
+    padding-right: 6px;
+}
 
 #workspaces button {
-    padding: 0 5px;
+    padding: 0 6px;
     background-color: transparent;
     color: @surface1;
+    border-radius: 999px;
+    margin: 0 3px;
 }
 
 #workspaces button:hover {
@@ -41,158 +104,99 @@ button {
 }
 
 #workspaces button.persistent {
-    color: @yellow;
+    color: #f9e2af;
 }
 
 #workspaces button.active {
     color: @lavender;
+    background-color: rgba(180, 190, 254, 0.14);
+    box-shadow:
+        0 0 0 1px rgba(180, 190, 254, 0.12),
+        0 0 10px rgba(180, 190, 254, 0.18),
+        0 0 18px rgba(137, 180, 250, 0.10);
 }
 
-
-#workspaces button.deafult {
+#workspaces button.default {
     color: @surface1;
 }
 
 #workspaces button.empty {
-	color: @overlay0;
+    color: @overlay0;
 }
 
 #workspaces button.urgent {
-    background-color: @red;
-}
-
-#mode {
-    background-color: @pink;
-    box-shadow: inset 0 -3px @text;
-}
-
-#clock,
-#battery,
-#cpu,
-#memory,
-#disk,
-#temperature,
-#backlight,
-#network,
-#pulseaudio,
-#wireplumber,
-#tray,
-#mode,
-#idle_inhibitor,
-#scratchpad,
-#custom-power
-#mpd {
-    padding: 0 10px;
-    color: @text;
-    margin: 0px;
-}
-
-#window,
-#workspaces {
-    background-color: @base;
-    border-radius: 10px;
-    padding-right: 4px;
-}
-
-/* If workspaces is the leftmost module, omit left margin */
-.modules-left > widget:first-child > #workspaces {
-    margin-left: 0;
-    margin-right: 0;
-}
-
-/* If workspaces is the rightmost module, omit right margin */
-.modules-right > widget:last-child > #workspaces {
-    margin-right: 0;
-    margin-left: 0;
-}
-
-#clock {
-    background-color: @base;
-    color: @mauve;
-    border-radius: 10px 10px;
-    margin-left: 15px;
-}
-
-#battery {
-    background-color: @base;
-    color: @blue;
-	padding-left: 0px;
-}
-
-#battery.charging, #battery.plugged {
-    color: @teal;
-    background-color: @base;
-	padding-left: 0px;
-}
-
-
-label:focus {
-    background-color: @base;
-}
-
-#cpu {
-	background-color: @base;
-  color: @sapphire;
-	margin-left: 3.5px;
-	border-radius: 10px 0px 0px 10px;
-}
-
-#memory {
-	background-color: @base;
-	color: @yellow;
-	padding-left: 0px;
-}
-
-#disk {
-    background-color: #964B00;
-}
-
-#backlight {
-    background-color: @base;
-    color: @text;
-    border-radius: 0px 10px 10px 0px;
-    margin-right: 3.5px;
-	padding-left: 0px;
-}
-
-#custom-power{
-    background-color: @base;
-    color: @teal;
-    margin-right: 15px;
-    border-radius: 0px 10px 10px 0px;
-	padding-left: 0px;
-	padding-right: 10px;
-}
-
-
-#network {
-    background-color: @base;
-    color: @teal;
-	padding-left: 0px;
-}
-
-#network.disconnected {
-    background-color: @base;
     color: @red;
-	padding-left: 0px;
+    background-color: rgba(243, 139, 168, 0.12);
 }
 
+/* Sağ taraf */
 #pulseaudio {
-	background-color: @base;
-	color: @mauve;
-	border-radius: 10px 0px 0px 10px;
+    color: @mauve;
 }
 
 #pulseaudio.muted {
-	background-color: @base;
-	color: @overlay0;
-	border-radius: 10px 0px 0px 10px;
+    color: @overlay0;
 }
 
-#tray {
-	background-color: @base;
-	border-radius: 10px;
-	margin-left: 3.5px;
+#backlight {
+    color: @yellow;
+}
+
+#cpu {
+    color: @blue;
+}
+
+#memory {
+    color: @teal;
+}
+
+#battery {
+    color: @peach;
+}
+
+#battery.charging,
+#battery.plugged {
+    color: @green;
+}
+
+#battery.warning:not(.charging) {
+    color: @yellow;
+}
+
+#battery.critical:not(.charging) {
+    color: @red;
+}
+
+#bluetooth {
+    color: @sapphire;
+    padding-right: 6px;
+}
+
+#bluetooth.connected {
+    color: @sapphire;
+}
+
+#bluetooth.disabled {
+    color: @overlay0;
+}
+
+#network {
+    color: @sky;
+    padding-left: 6px;
+}
+
+#network.disconnected {
+    color: @red;
+}
+
+#custom-power {
+    color: @subtext1;
+    padding-right: 14px;
+    padding-left: 10px;
+}
+
+#custom-power:hover {
+    color: @red;
 }
 
 #tray > .passive {
@@ -201,5 +205,4 @@ label:focus {
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
-    background-color: @red;
 }

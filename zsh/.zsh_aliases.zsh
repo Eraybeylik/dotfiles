@@ -66,7 +66,6 @@ alias cat='bat --style=plain --paging=never'
 
 # Hyprland configs
 alias hypr='nvim ~/.config/hypr/hyprland.conf'
-alias waybar='nvim ~/.config/waybar/config.jsonc'
 alias zshrc='nvim ~/.zshrc'
 alias aliases='nvim ~/.zsh_aliases.zsh'
 
