@@ -72,3 +72,20 @@ alias aliases='nvim ~/.zsh_aliases.zsh'
 # Nvim update
 alias nvim-update='nvim +Lazy sync +qa && echo "✓ Nvim plugins updated"'
 alias nvim-clean='rm -rf ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim && echo "✓ Nvim cache cleaned"'
+
+# AI 
+alias ai-up='sudo docker start open-webui > /dev/null && sudo systemctl start ollama'
+
+# MSSQL
+alias mssql='docker start mssql'
+alias mssql-stop='docker stop mssql'
+
+# Elastic SSH
+elastic() {
+  kitty --session - <<EOF
+layout splits
+launch ssh es1
+launch --location=vsplit ssh es2
+launch --location=hsplit ssh es3
+EOF
+}

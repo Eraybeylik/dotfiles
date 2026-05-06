@@ -52,3 +52,10 @@ if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
 fi
 export PATH=$PATH:/var/lib/snapd/snap/bin
 export XDG_DATA_DIRS="/var/lib/snapd/desktop:$XDG_DATA_DIRS"
+
+# opencode
+export PATH=/home/xera/.opencode/bin:$PATH
+export PATH="$HOME/.local/share/npm-global/bin:$PATH"
+export PATH="$HOME/.local/share/npm-global/bin:$PATH"
+
+. "$HOME/.local/bin/env"
