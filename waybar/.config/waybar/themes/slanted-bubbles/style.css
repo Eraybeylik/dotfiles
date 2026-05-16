@@ -7,7 +7,7 @@
 
 
 /*------------Importing Matugen Colors---------------*/
-@import "matugen/matugen-waybar.css";
+@import "../../colors.css";
 
 
 /*------------Global Properties-----------------*/
