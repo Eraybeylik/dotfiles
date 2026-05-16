@@ -20,21 +20,24 @@ warn()    { echo -e "${YELLOW}[WARN]${NC} $1"; }
 error()   { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 step()    { echo -e "\n${CYAN}==>${NC} $1"; }
 
-trap 'error "Script beklenmedik şekilde durdu. Son komut hata verdi."' ERR
+trap 'error "Script stopped unexpectedly. Last command failed."' ERR
 
-[ "${EUID}" -eq 0 ] && error "Bu scripti root olarak çalıştırma!"
+[ "${EUID}" -eq 0 ] && error "Do not run this script as root!"
 
 DOTFILES_DIR="${HOME}/.dotfiles"
 ZPROFILE="${HOME}/.zprofile"
 
 # ------------------------------------------------------------
-# Paket listeleri
+# Package lists
 # ------------------------------------------------------------
 PACMAN_PKGS=(
   amd-ucode
+  adw-gtk-theme
+  awww
   base
   base-devel
   bat
+  bc
   blueman
   bluez
   bluez-utils
@@ -48,9 +51,9 @@ PACMAN_PKGS=(
   docker-buildx
   docker-compose
   dosfstools
-  dunst
   efibootmgr
   egl-wayland
+  fastfetch
   fd
   fuse3
   git
@@ -63,6 +66,8 @@ PACMAN_PKGS=(
   hyprland
   hyprlock
   hyprpicker
+  imagemagick
+  jq
   kitty
   kvantum
   less
@@ -90,6 +95,8 @@ PACMAN_PKGS=(
   pipewire-pulse
   playerctl
   polkit-kde-agent
+  python-pyquery
+  python-requests
   qemu-audio-spice
   qemu-base
   qemu-chardev-spice
@@ -102,6 +109,7 @@ PACMAN_PKGS=(
   qt6-wayland
   qt6ct
   ripgrep
+  rofi-wayland
   satty
   sddm
   sof-firmware
@@ -110,10 +118,9 @@ PACMAN_PKGS=(
   starship
   stow
   sudo
-  swww
+  swaync
   thunar
   thunar-archive-plugin
-  tofi
   ttf-fira-code
   ttf-fira-sans
   ttf-nerd-fonts-symbols
@@ -127,11 +134,12 @@ PACMAN_PKGS=(
   wpa_supplicant
   xdg-desktop-portal-hyprland
   xdg-user-dirs
+  xxhash
   zoxide
   zram-generator
   zsh
 
-  # GTK / GSettings / icon / mime fix paketleri
+  # GTK / GSettings / icon / mime fix packages
   adwaita-icon-theme
   gdk-pixbuf2
   glib2
@@ -143,29 +151,30 @@ PACMAN_PKGS=(
 )
 
 AUR_PKGS=(
-  catppuccin-gtk-theme-mocha
   cloudflare-warp-bin
+  matugen
   google-chrome
   grimblast-git
   obsidian
   pycharm
   vesktop-bin
   visual-studio-code-bin
+  waypaper
   wlogout
 )
 
 # ------------------------------------------------------------
-step "1. Sistem güncelleme"
+step "1. System update"
 # ------------------------------------------------------------
-info "Sistem güncelleniyor..."
+info "Updating system..."
 sudo pacman -Syu --noconfirm
-success "Sistem güncellendi"
+success "System updated"
 
 # ------------------------------------------------------------
-step "2. yay kurulumu"
+step "2. yay installation"
 # ------------------------------------------------------------
 if ! command -v yay >/dev/null 2>&1; then
-  info "yay kuruluyor..."
+  info "Installing yay..."
   sudo pacman -S --noconfirm --needed git base-devel
   rm -rf /tmp/yay
   git clone https://aur.archlinux.org/yay.git /tmp/yay
@@ -173,63 +182,64 @@ if ! command -v yay >/dev/null 2>&1; then
     cd /tmp/yay
     makepkg -si --noconfirm
   )
-  success "yay kuruldu"
+  success "yay installed"
 else
-  success "yay zaten kurulu"
+  success "yay already installed"
 fi
 
 # ------------------------------------------------------------
-step "3. Pacman paketleri"
+step "3. Pacman packages"
 # ------------------------------------------------------------
-info "Pacman paketleri kuruluyor..."
+info "Installing pacman packages..."
 sudo pacman -S --noconfirm --needed "${PACMAN_PKGS[@]}"
-success "Pacman paketleri kuruldu"
+success "Pacman packages installed"
 
 # ------------------------------------------------------------
-step "4. AUR paketleri"
+step "4. AUR packages"
 # ------------------------------------------------------------
-info "AUR paketleri kuruluyor..."
+info "Installing AUR packages..."
 yay -S --noconfirm --needed "${AUR_PKGS[@]}"
-success "AUR paketleri kuruldu"
+success "AUR packages installed"
 
 # ------------------------------------------------------------
-step "5. Servisler"
+step "5. Services"
 # ------------------------------------------------------------
-info "NetworkManager etkinleştiriliyor..."
+info "Enabling NetworkManager..."
 sudo systemctl enable --now NetworkManager
 
-info "Bluetooth etkinleştiriliyor..."
+info "Enabling Bluetooth..."
 sudo systemctl enable --now bluetooth
 
-info "Docker etkinleştiriliyor..."
+info "Enabling Docker..."
 sudo systemctl enable --now docker
 
-info "SDDM etkinleştiriliyor..."
+info "Enabling SDDM..."
 sudo systemctl enable sddm
 
-info "PipeWire kullanıcı servisleri etkinleştiriliyor..."
+info "Enabling PipeWire user services..."
 systemctl --user enable --now pipewire pipewire-pulse wireplumber || true
 
-success "Servisler ayarlandı"
+# awww-daemon is launched via Hyprland autostart (exec-once = awww-daemon)
+success "Services configured"
 
 # ------------------------------------------------------------
-step "6. Kullanıcı grup üyelikleri"
+step "6. User group memberships"
 # ------------------------------------------------------------
-info "Kullanıcı gerekli gruplara ekleniyor..."
+info "Adding user to required groups..."
 sudo usermod -aG libvirt,docker "${USER}" || true
-success "Grup üyelikleri ayarlandı (yeniden giriş gerekli)"
+success "Group memberships set (re-login required)"
 
 # ------------------------------------------------------------
-step "7. GTK / schema / mime / pixbuf düzeltmeleri"
+step "7. GTK / schema / mime / pixbuf fixes"
 # ------------------------------------------------------------
-info "Schema ve cache'ler güncelleniyor..."
+info "Updating schemas and caches..."
 sudo glib-compile-schemas /usr/share/glib-2.0/schemas || true
 sudo update-mime-database /usr/share/mime || true
 sudo gdk-pixbuf-query-loaders --update-cache || true
-success "GTK cache'leri güncellendi"
+success "GTK caches updated"
 
 # ------------------------------------------------------------
-step "8. XDG_DATA_DIRS düzeltmesi"
+step "8. XDG_DATA_DIRS fix"
 # ------------------------------------------------------------
 if [ -f "${ZPROFILE}" ]; then
   cp "${ZPROFILE}" "${ZPROFILE}.bak.$(date +%s)"
@@ -244,27 +254,27 @@ else
     echo 'export XDG_DATA_DIRS="/usr/local/share:/usr/share"'
   } >> "${ZPROFILE}"
 fi
-success "~/.zprofile güncellendi"
+success "~/.zprofile updated"
 
 # ------------------------------------------------------------
-step "9. XDG kullanıcı dizinleri"
+step "9. XDG user directories"
 # ------------------------------------------------------------
 xdg-user-dirs-update || true
-success "XDG dizinleri oluşturuldu"
+success "XDG directories created"
 
 # ------------------------------------------------------------
 step "10. Dotfiles"
 # ------------------------------------------------------------
 if [ ! -d "${DOTFILES_DIR}" ]; then
-  info "Dotfiles klonlanıyor..."
+  info "Cloning dotfiles..."
   if ssh -T git@github.com >/dev/null 2>&1; then
     git clone git@github.com:Eraybeylik/dotfiles.git "${DOTFILES_DIR}"
   else
-    warn "SSH yok, HTTPS ile klonlanıyor..."
+    warn "No SSH key found, cloning via HTTPS..."
     git clone https://github.com/Eraybeylik/dotfiles.git "${DOTFILES_DIR}"
   fi
 else
-  info "Dotfiles zaten mevcut, güncelleniyor..."
+  info "Dotfiles already present, pulling latest..."
   (
     cd "${DOTFILES_DIR}"
     git pull --ff-only || true
@@ -273,54 +283,55 @@ fi
 
 if [ -d "${DOTFILES_DIR}" ]; then
   cd "${DOTFILES_DIR}"
-  info "Stow ile dotfiles bağlanıyor..."
-  for pkg in hyprland waybar kitty dunst tofi wlogout btop starship gtk-3.0 gtk-4.0 nvim zsh wallpapers assets; do
-    [ -d "${pkg}" ] && stow "${pkg}" || true
+  info "Linking dotfiles with stow..."
+  for pkg in btop fastfetch gtk-3.0 gtk-4.0 hyprland kitty matugen nvim rofi starship swaync wallpapers waybar wlogout zsh; do
+    [ -d "${pkg}" ] && stow "${pkg}" || warn "Directory '${pkg}' not found, skipping"
   done
-  success "Dotfiles bağlandı"
+  success "Dotfiles linked"
 else
-  warn "Dotfiles dizini bulunamadı, stow atlandı"
+  warn "Dotfiles directory not found, skipping stow"
 fi
 
 # ------------------------------------------------------------
-step "11. Wallpaper dizini"
+step "11. Wallpaper directory"
 # ------------------------------------------------------------
 mkdir -p "${HOME}/Pictures/Wallpapers"
-success "Wallpaper dizini hazır"
+success "Wallpaper directory ready"
 
 # ------------------------------------------------------------
-step "12. Varsayılan shell"
+step "12. Default shell"
 # ------------------------------------------------------------
 if [ "${SHELL}" != "$(command -v zsh)" ]; then
-  info "Varsayılan shell zsh yapılıyor..."
+  info "Setting default shell to zsh..."
   chsh -s "$(command -v zsh)"
-  success "Zsh ayarlandı (yeniden giriş gerekli)"
+  success "Zsh set as default shell (re-login required)"
 else
-  success "Zsh zaten varsayılan"
+  success "Zsh already default"
 fi
 
 # ------------------------------------------------------------
-step "13. Son kontroller"
+step "13. Final checks"
 # ------------------------------------------------------------
-for cmd in waybar pavucontrol blueman-manager nmtui brightnessctl playerctl docker virt-manager hyprland; do
+for cmd in waybar rofi swaync pavucontrol blueman-manager nmtui brightnessctl playerctl docker virt-manager hyprland matugen fastfetch waypaper; do
   if command -v "${cmd}" >/dev/null 2>&1; then
-    success "${cmd} bulundu"
+    success "${cmd} found"
   else
-    warn "${cmd} bulunamadı"
+    warn "${cmd} not found"
   fi
 done
 
 echo ""
 echo -e "${GREEN}============================================${NC}"
-echo -e "${GREEN}  Kurulum tamamlandı!${NC}"
+echo -e "${GREEN}  Installation complete!${NC}"
 echo -e "${GREEN}============================================${NC}"
 echo ""
-echo -e "${YELLOW}Sonraki adımlar:${NC}"
-echo "  1. reboot at"
-echo "  2. giriş ekranında Hyprland seç"
-echo "  3. yeniden giriş yaptıktan sonra grup üyelikleri aktif olur"
+echo -e "${YELLOW}Next steps:${NC}"
+echo "  1. Reboot the system"
+echo "  2. Select Hyprland on the login screen"
+echo "  3. Group memberships (docker, libvirt) activate after re-login"
+echo "  4. awww-daemon starts automatically via Hyprland autostart"
 echo ""
-echo -e "${CYAN}Not:${NC}"
-echo "  - Waybar / GTK / GSettings bozulursa ~/.zprofile içindeki XDG_DATA_DIRS satırını kontrol et"
-echo "  - Docker için yeniden giriş gerekebilir"
-echo "  - Libvirt için virt-manager kullanmadan önce yeniden giriş yap"
+echo -e "${CYAN}Notes:${NC}"
+echo "  - If Waybar / GTK / GSettings breaks, check XDG_DATA_DIRS in ~/.zprofile"
+echo "  - Docker may require re-login to use without sudo"
+echo "  - Re-login before using virt-manager with libvirt"
