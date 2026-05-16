@@ -59,3 +59,4 @@ export PATH="$HOME/.local/share/npm-global/bin:$PATH"
 
 . "$HOME/.local/bin/env"
 fastfetch
+alias clear='clear && printf "[3J"'
