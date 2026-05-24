@@ -193,3 +193,7 @@ tooltip {
   border: 2px solid @primary;
 }
 
+label {
+  letter-spacing: 2px;
+}
+
