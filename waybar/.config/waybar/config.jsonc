@@ -18,6 +18,7 @@
 	 "modules-right": [
 		 "cpu",
 		 "memory",
+     "network",
 		 "pulseaudio",
 		 "clock",
 		 "clock#simpleclock",
@@ -37,12 +38,15 @@
 		 }
 	 },
 	 "hyprland/workspaces": {
-		 "on-click": "activate",
-		 "format": "{id}",
-		 "all-outputs": true,
-		 "disable-scroll": false,
-		 "active-only": false
-	 },
+    "on-click": "activate",
+    "format": "{name}",
+    "all-outputs": false,
+    "disable-scroll": false,
+    "active-only": false,
+    "persistent-workspaces": {
+        "*": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    }
+   },
 	 "wlr/taskbar": {
 		 "format": "{icon}",
 		 "rotate": 0,
@@ -89,6 +93,15 @@
 		 },
 		 "on-click": "pavucontrol"
 	 },
+  	"network": {
+		"format-wifi": "",
+		"format-ethernet":"",
+		"format-disconnected": "",
+		"tooltip-format-disconnected": "Error",
+		"tooltip-format-wifi": "{essid} ({signalStrength}%) ",
+		"tooltip-format-ethernet": "{ifname} 🖧 ",
+		"on-click": "kitty --title KittyNmtui sh -c 'sleep 0.1; nmtui'"
+    },
 	 "custom/sep": {
 		 "format": "|",
 		 "tooltip": false
@@ -139,11 +152,11 @@
 		 "signal": 1
 	 },
 	 "custom/pacman": {
-		 "format": "󰅢{}",
+		 "format": "󰅢  {}",
 		 "interval": 30,   
 		 "exec": "checkupdates | wc -l",
 		 "exec-if": "exit 0",
-		 "on-click": "kitty --title PacUpdate sh -c 'sleep 0.1; paru -Syu; echo Done - Press enter to exit; read'; pkill -SIGRTMIN+8 waybar",
+		 "on-click": "kitty --title PacUpdate sh -c 'sleep 0.1; yay -Syu; echo Done - Press enter to exit; read'; pkill -SIGRTMIN+8 waybar",
 		 "signal": 8,
 		 "tooltip": false
 	 },

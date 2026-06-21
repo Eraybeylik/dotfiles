@@ -86,6 +86,7 @@
 
 #clock,
 #pulseaudio,
+#network,
 #custom-logo,
 #custom-launcher,
 #custom-spotify,
@@ -186,6 +187,14 @@
   border-radius: 0px 6px 6px 0px;
   border-right: none;
   border-left: none;
+}
+
+#network {
+  color: @primary;
+}
+
+#network.disconnected {
+  color: @error;
 }
 
 tooltip {
