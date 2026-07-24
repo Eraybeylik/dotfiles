@@ -5,18 +5,18 @@
  *                              
  */
 
-@define-color accent_color #a0cafd;
-@define-color accent_bg_color #1a4975;
-@define-color accent_fg_color #d1e4ff;
+@define-color accent_color #a2c9fd;
+@define-color accent_bg_color #1c4975;
+@define-color accent_fg_color #d2e4ff;
 @define-color destructive_color #ffb4ab;
 @define-color destructive_bg_color #93000a;
 @define-color destructive_fg_color #ffdad6;
 @define-color success_color #bbc7db;
-@define-color success_bg_color #3b4858;
+@define-color success_bg_color #3c4858;
 @define-color success_fg_color #d7e3f8;
-@define-color warning_color #d7bee4;
-@define-color warning_bg_color #523f5f;
-@define-color warning_fg_color #f3daff;
+@define-color warning_color #d8bde4;
+@define-color warning_bg_color #533f5f;
+@define-color warning_fg_color #f4daff;
 @define-color error_color #ffb4ab;
 @define-color error_bg_color #93000a;
 @define-color error_fg_color #ffdad6;
