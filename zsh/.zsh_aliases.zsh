@@ -89,3 +89,24 @@ launch --location=vsplit ssh es2
 launch --location=hsplit ssh es3
 EOF
 }
+# ============ TMUX ============
+alias t='tmux'
+alias ta='tmux attach -t'
+alias tls='tmux ls'
+alias tn='tmux new -s'
+alias tk='tmux kill-session -t'
+
+# Dizin adıyla session aç veya varsa bağlan
+tt() {
+    local name="${1:-${PWD##*/}}"
+    tmux new-session -A -s "${name//./_}"
+}
+
+# Elastic 3 node — kitty yerine tmux ile
+elastic-tmux() {
+  tmux new-session -d -s elastic 'ssh es1' \; \
+       split-window -h 'ssh es2' \; \
+       split-window -v 'ssh es3' \; \
+       select-layout main-vertical \; \
+       attach -t elastic
+}

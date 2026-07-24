@@ -58,8 +58,9 @@ export PATH=/home/xera/.opencode/bin:$PATH
 export PATH="$HOME/.local/share/npm-global/bin:$PATH"
 
 . "$HOME/.local/bin/env"
-fastfetch
+[ -z "$TMUX" ] && fastfetch
 alias clear='clear && printf "[3J"'
 
 # GO 
 export PATH="$PATH:$HOME/go/bin"
+
