@@ -17,8 +17,13 @@ input_path = '~/.config/matugen/templates/matugen-rofi.rasi'
 output_path = '~/.config/rofi/matugen/matugen-rofi.rasi'
 
 [templates.hyprland]
-input_path = '~/.config/matugen/templates/matugen-hyprland.conf'
-output_path = '~/.config/hypr/matugen/matugen-hyprland.conf'
+input_path = '~/.config/matugen/templates/matugen-hyprland-colors.lua'
+output_path = '~/.config/hypr/matugen/colors.lua'
+post_hook = 'hyprctl reload'
+
+[templates.starship]
+input_path = '~/.config/matugen/templates/matugen-starship.toml'
+output_path = '~/.config/starship.toml'
 
 [templates.hyprlock]
 input_path = '~/.config/matugen/templates/matugen-hyprlock.conf'
