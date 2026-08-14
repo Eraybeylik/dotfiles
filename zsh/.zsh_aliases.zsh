@@ -65,7 +65,7 @@ alias grep='grep --color=auto'
 alias cat='bat --style=plain --paging=never'
 
 # Hyprland configs
-alias hypr='nvim ~/.config/hypr/hyprland.conf'
+alias hypr='nvim ~/.config/hypr/hyprland.lua'
 alias zshrc='nvim ~/.zshrc'
 alias aliases='nvim ~/.zsh_aliases.zsh'
 
