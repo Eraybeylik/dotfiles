@@ -78,6 +78,30 @@ hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 ---- LOOK AND FEEL ----
 -----------------------
 
+-- Matugen palette, regenerated on wallpaper change (matugen/colors.lua).
+-- Falls back to static Catppuccin colors if not generated yet.
+local haveMat, mat = pcall(require, "matugen.colors")
+
+local function rgba(hex, alpha)
+    return "rgba(" .. hex .. alpha .. ")"
+end
+
+local glowColors = haveMat
+    and { rgba(mat.primary, "66"), rgba(mat.tertiary, "66") }
+    or  { "rgba(b4befe66)", "rgba(cba6f766)" }
+
+local shadowColors = haveMat
+    and { rgba(mat.tertiary, "66"), rgba(mat.primary, "66") }
+    or  { "rgba(cba6f766)", "rgba(89b4fa66)" }
+
+local borderColors = haveMat
+    and { rgba(mat.primary, "ff"), rgba(mat.secondary, "ff"), rgba(mat.tertiary, "ff") }
+    or  { "rgba(b4befeff)", "rgba(89b4faff)", "rgba(cba6f7ff)" }
+
+local borderInactive = haveMat
+    and rgba(mat.surface_container_high, "99")
+    or  "rgba(1e1e2e99)"
+
 hl.config({
     general = {
         gaps_in     = 6,
@@ -85,8 +109,8 @@ hl.config({
         border_size = 2,
 
         col = {
-            active_border   = { colors = { "rgba(b4befeff)", "rgba(89b4faff)", "rgba(cba6f7ff)" }, angle = 45 },
-            inactive_border = "rgba(1e1e2e99)",
+            active_border   = { colors = borderColors, angle = 45 },
+            inactive_border = borderInactive,
         },
 
         resize_on_border = true,
@@ -95,7 +119,8 @@ hl.config({
     },
 
     decoration = {
-        rounding = 12,
+        rounding       = 12,
+        rounding_power = 3, -- squircle corners
 
         active_opacity   = 1.0,
         inactive_opacity = 1.0,
@@ -104,8 +129,21 @@ hl.config({
             enabled        = true,
             range          = 20,
             render_power   = 3,
-            color          = 0x80000000, -- rgba(0,0,0,0.5)
+            color          = { colors = shadowColors, angle = 45 },
             color_inactive = 0x4D000000, -- rgba(0,0,0,0.3)
+        },
+
+        glow = {
+            enabled        = true,
+            range          = 14,
+            render_power   = 3,
+            color          = { colors = glowColors, angle = 45 },
+            color_inactive = 0x2E1E1E2E, -- subtle dark
+        },
+
+        motion_blur = {
+            enabled = true,
+            samples = 7,
         },
 
         blur = {
@@ -135,6 +173,7 @@ hl.curve("menu_decel", { type = "bezier", points = { {0.05, 0.82}, {0, 1}       
 hl.curve("menu_accel", { type = "bezier", points = { {0.20, 0},    {0.82, 0.10} } })
 hl.curve("md3_decel",  { type = "bezier", points = { {0.05, 0.80}, {0.10, 0.97} } })
 hl.curve("md3_accel",  { type = "bezier", points = { {0.20, 0},    {0.80, 0.08} } })
+hl.curve("linear",     { type = "bezier", points = { {0, 0},       {1, 1}       } })
 
 hl.animation({ leaf = "windows",          enabled = true, speed = 5,   bezier = "overshot",   style = "slide" })
 hl.animation({ leaf = "windowsOut",       enabled = true, speed = 5,   bezier = "snapback",   style = "slide" })
@@ -150,6 +189,8 @@ hl.animation({ leaf = "fade",             enabled = true, speed = 1.8, bezier = 
 hl.animation({ leaf = "fadeDim",          enabled = true, speed = 5,   bezier = "default" })
 hl.animation({ leaf = "workspaces",       enabled = true, speed = 6,   bezier = "curve" })
 hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 2.3, bezier = "md3_decel", style = "slidefadevert 15%" })
+hl.animation({ leaf = "shadowangle",      enabled = true, speed = 100, bezier = "linear", style = "loop" })
+hl.animation({ leaf = "glowangle",        enabled = true, speed = 100, bezier = "linear", style = "loop" })
 
 hl.config({
     dwindle = {
@@ -201,7 +242,9 @@ hl.gesture({
 
 hl.config({
     gestures = {
-        workspace_swipe_distance = 700,
+        workspace_swipe_distance           = 1200, -- higher = more finger travel per workspace
+        workspace_swipe_min_speed_to_force = 60,   -- higher = quick flicks don't insta-switch
+        workspace_swipe_cancel_ratio       = 0.6,  -- must swipe 60% of distance to commit
     },
 })
 
