@@ -4,27 +4,27 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
 
-# Vi mode (jeffreytse/zsh-vi-mode) — loads immediately, not in turbo
+# Vi mode (jeffreytse/zsh-vi-mode) — loads immediately, not in turbo.
+# ZVM_INIT_MODE=sourcing: init at source time instead of first prompt,
+# so later plugins (fzf-tab) keep their Tab/^I bindings.
+ZVM_INIT_MODE=sourcing
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
 
-# Keybindings + fzf must be (re)applied after zsh-vi-mode initializes,
-# because zvm overrides most bindings
-zvm_after_init() {
-    # fzf: Ctrl+R fuzzy history, Ctrl+T files, Alt+C cd
-    if command -v fzf &> /dev/null; then
-        source <(fzf --zsh)
-    fi
+# zvm is fully initialized here (sourcing mode), so bindings below win.
+# fzf: Ctrl+R fuzzy history, Ctrl+T files, Alt+C cd
+if command -v fzf &> /dev/null; then
+    source <(fzf --zsh)
+fi
 
-    bindkey '^[[3~' delete-char                       # delete
-    bindkey '^[[1;5C' forward-word                    # ctrl + ->
-    bindkey '^[[1;5D' backward-word                   # ctrl + <-
-    bindkey '^[[5~' beginning-of-buffer-or-history    # page up
-    bindkey '^[[6~' end-of-buffer-or-history          # page down
-    bindkey '^[[H' beginning-of-line                  # home
-    bindkey '^[[F' end-of-line                        # end
-    bindkey '^[[Z' undo                               # shift + tab undo
-}
+bindkey '^[[3~' delete-char                       # delete
+bindkey '^[[1;5C' forward-word                    # ctrl + ->
+bindkey '^[[1;5D' backward-word                   # ctrl + <-
+bindkey '^[[5~' beginning-of-buffer-or-history    # page up
+bindkey '^[[6~' end-of-buffer-or-history          # page down
+bindkey '^[[H' beginning-of-line                  # home
+bindkey '^[[F' end-of-line                        # end
+bindkey '^[[Z' undo                               # shift + tab undo
 
 # Plugins — turbo mode (lazy load after prompt, big startup win).
 # Order matters: fzf-tab first (after compinit via atinit),
