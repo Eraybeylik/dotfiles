@@ -1,0 +1,266 @@
+/* =============================================
+   Matugen — Obsidian CSS Snippet
+   Generated from wallpaper — do not edit by hand.
+   Hyprland/Kitty/Waybar ile tutarlı Material palette
+   ============================================= */
+
+/* --- Genel Arka Plan & Metin --- */
+.theme-dark,
+.theme-dark .workspace {
+  --background-primary:          {{colors.surface.default.hex}};
+  --background-primary-alt:      {{colors.surface_container_low.default.hex}};
+  --background-secondary:        {{colors.surface_container_low.default.hex}};
+  --background-secondary-alt:    {{colors.surface_container_lowest.default.hex}};
+  --background-modifier-border:  {{colors.surface_container_high.default.hex}};
+  --background-modifier-hover:   {{colors.surface_container.default.hex}};
+  --text-normal:                 {{colors.on_surface.default.hex}};
+  --text-muted:                  {{colors.on_surface_variant.default.hex}};
+  --text-faint:                  {{colors.outline.default.hex}};
+  --text-accent:                 {{colors.primary.default.hex}};
+  --text-accent-hover:           {{colors.primary_fixed.default.hex}};
+  --text-selection:              {{colors.primary.default.rgba | set_alpha: 0.15}};
+  --interactive-accent:          {{colors.primary.default.hex}};
+  --interactive-accent-hover:    {{colors.primary_fixed.default.hex}};
+  --text-on-accent:              {{colors.on_primary.default.hex}};
+  --interactive-normal:          {{colors.surface_container.default.hex}};
+  --interactive-hover:           {{colors.surface_container_high.default.hex}};
+  --scrollbar-thumb-bg:          {{colors.surface_container_highest.default.hex}};
+  --font-monospace:              "JetBrainsMono Nerd Font", monospace;
+}
+
+/* --- Başlıklar --- */
+.theme-dark {
+  --h1-color: {{colors.primary.default.hex}};
+  --h2-color: {{colors.primary.default.hex}};
+  --h3-color: {{colors.primary.default.hex}};
+  --h4-color: {{colors.secondary.default.hex}};
+  --h5-color: {{colors.secondary.default.hex}};
+  --h6-color: {{colors.on_surface_variant.default.hex}};
+}
+
+/* --- Sol Kenar Çubuğu --- */
+.theme-dark .nav-folder-title,
+.theme-dark .nav-file-title {
+  color: {{colors.on_surface_variant.default.hex}};
+  border-radius: 6px;
+}
+
+.theme-dark .nav-file-title.is-active,
+.theme-dark .nav-folder-title.is-active {
+  background: {{colors.surface_container.default.hex}};
+  color: {{colors.primary.default.hex}};
+}
+
+.theme-dark .nav-file-title:hover,
+.theme-dark .nav-folder-title:hover {
+  background: {{colors.surface_container.default.hex}};
+  color: {{colors.on_surface.default.hex}};
+}
+
+/* --- Tab Bar --- */
+.theme-dark .workspace-tab-header {
+  background: {{colors.surface_container_low.default.hex}};
+}
+
+.theme-dark .workspace-tab-header.is-active {
+  background: {{colors.surface.default.hex}};
+  color: {{colors.primary.default.hex}};
+}
+
+/* --- Editör --- */
+.theme-dark .cm-s-obsidian {
+  background: {{colors.surface.default.hex}};
+  color: {{colors.on_surface.default.hex}};
+}
+
+/* Cursor */
+.theme-dark .cm-cursor {
+  border-left-color: {{colors.primary.default.hex}} !important;
+}
+
+/* Seçim */
+.theme-dark .cm-selectionBackground,
+.theme-dark ::selection {
+  background: {{colors.primary.default.rgba | set_alpha: 0.15}} !important;
+}
+
+/* Inline code (sadece paragraf/liste içi) */
+.theme-dark code {
+  background: {{colors.surface_container_high.default.hex}};
+  color: {{colors.tertiary.default.hex}};
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* Code block wrapper — görsel stiller burada */
+.theme-dark pre {
+  background: {{colors.surface_container_low.default.hex}};
+  border: 1px solid {{colors.surface_container_high.default.hex}};
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+/* Code block içindeki code — inline stilleri sıfırla */
+.theme-dark pre code {
+  background: transparent;
+  color: {{colors.on_surface.default.hex}};
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  display: block;
+  white-space: pre;
+}
+
+/* Link */
+.theme-dark a,
+.theme-dark .cm-link {
+  color: {{colors.primary.default.hex}};
+}
+
+.theme-dark a:hover {
+  color: {{colors.primary_fixed.default.hex}};
+}
+
+/* İç link (wikilink) */
+.theme-dark .cm-hmd-internal-link {
+  color: {{colors.primary.default.hex}};
+}
+
+/* Bold */
+.theme-dark .cm-strong {
+  color: {{colors.tertiary.default.hex}};
+}
+
+/* İtalic */
+.theme-dark .cm-em {
+  color: {{colors.secondary.default.hex}};
+}
+
+/* Blockquote */
+.theme-dark blockquote {
+  border-left: 3px solid {{colors.tertiary.default.hex}};
+  color: {{colors.on_surface_variant.default.hex}};
+  background: {{colors.surface_container_low.default.hex}};
+  border-radius: 0 6px 6px 0;
+  padding: 8px 14px;
+}
+
+/* Tag */
+.theme-dark .tag {
+  background: {{colors.primary.default.rgba | set_alpha: 0.12}};
+  color: {{colors.primary.default.hex}};
+  border: 1px solid {{colors.primary.default.rgba | set_alpha: 0.25}};
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+/* --- Callout'lar --- */
+.theme-dark .callout[data-callout="check"],
+.theme-dark .callout[data-callout="success"] {
+  --callout-color: {{colors.primary.default.red}}, {{colors.primary.default.green}}, {{colors.primary.default.blue}};
+  --callout-icon: check;
+}
+
+.theme-dark .callout[data-callout="todo"] {
+  --callout-color: {{colors.secondary.default.red}}, {{colors.secondary.default.green}}, {{colors.secondary.default.blue}};
+  --callout-icon: circle-check;
+}
+
+.theme-dark .callout[data-callout="planning"],
+.theme-dark .callout[data-callout="tip"] {
+  --callout-color: {{colors.primary.default.red}}, {{colors.primary.default.green}}, {{colors.primary.default.blue}};
+  --callout-icon: calendar;
+}
+
+.theme-dark .callout[data-callout="warning"] {
+  --callout-color: {{colors.tertiary.default.red}}, {{colors.tertiary.default.green}}, {{colors.tertiary.default.blue}};
+}
+
+.theme-dark .callout[data-callout="danger"] {
+  --callout-color: {{colors.error.default.red}}, {{colors.error.default.green}}, {{colors.error.default.blue}};
+}
+
+/* --- Status Bar --- */
+.theme-dark .status-bar {
+  background: {{colors.surface_container_lowest.default.hex}};
+  border-top: 1px solid {{colors.surface_container_high.default.hex}};
+  color: {{colors.outline.default.hex}};
+}
+
+/* --- Modal / Popup --- */
+.theme-dark .modal {
+  background: {{colors.surface_container_low.default.hex}};
+  border: 1px solid {{colors.outline_variant.default.hex}};
+  border-radius: 12px;
+}
+
+/* --- Command Palette --- */
+.theme-dark .prompt {
+  background: {{colors.surface_container_low.default.hex}};
+  border: 1px solid {{colors.outline_variant.default.hex}};
+  border-radius: 12px;
+}
+
+.theme-dark .prompt-input {
+  background: {{colors.surface_container.default.hex}};
+  color: {{colors.on_surface.default.hex}};
+  border-radius: 8px;
+}
+
+.theme-dark .suggestion-item.is-selected {
+  background: {{colors.surface_container.default.hex}};
+  color: {{colors.primary.default.hex}};
+}
+
+/* --- Checkbox --- */
+.theme-dark input[type="checkbox"] {
+  border-color: {{colors.outline.default.hex}};
+  border-radius: 3px;
+}
+
+.theme-dark input[type="checkbox"]:checked {
+  background: {{colors.primary.default.hex}};
+  border-color: {{colors.primary.default.hex}};
+}
+
+/* --- Scrollbar --- */
+.theme-dark ::-webkit-scrollbar {
+  width: 5px;
+}
+
+.theme-dark ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.theme-dark ::-webkit-scrollbar-thumb {
+  background: {{colors.surface_container_highest.default.hex}};
+  border-radius: 999px;
+}
+
+/* --- Kanban Plugin --- */
+.theme-dark .kanban-plugin__board {
+  background: {{colors.surface_container_lowest.default.hex}};
+}
+
+.theme-dark .kanban-plugin__lane {
+  background: {{colors.surface_container_low.default.hex}};
+  border: 1px solid {{colors.surface_container_high.default.hex}};
+  border-radius: 10px;
+}
+
+.theme-dark .kanban-plugin__lane-title-text {
+  color: {{colors.primary.default.hex}};
+  font-weight: 700;
+}
+
+.theme-dark .kanban-plugin__item {
+  background: {{colors.surface_container.default.hex}};
+  border: 1px solid {{colors.surface_container_highest.default.hex}};
+  border-radius: 8px;
+  color: {{colors.on_surface.default.hex}};
+}
+
+.theme-dark .kanban-plugin__item:hover {
+  border-color: {{colors.primary.default.hex}};
+  box-shadow: 0 0 0 1px {{colors.primary.default.rgba | set_alpha: 0.2}};
+}

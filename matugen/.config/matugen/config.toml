@@ -29,6 +29,10 @@ output_path = '~/.config/starship.toml'
 input_path = '~/.config/matugen/templates/matugen-hyprlock.conf'
 output_path = '~/.config/hypr/hyprlock/matugen/matugen-hyprlock.conf'
 
+[templates.obsidian]
+input_path = '~/.config/matugen/templates/matugen-obsidian.css'
+output_path = '~/Documents/Vault/.obsidian/snippets/matugen-theme.css'
+
 [templates.gtk3]
 input_path = '~/.config/matugen/templates/matugen-gtk.css'
 output_path = '~/.config/gtk-3.0/gtk.css'
