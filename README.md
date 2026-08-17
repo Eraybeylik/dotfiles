@@ -49,7 +49,7 @@ Personal Wayland desktop setup — wallpaper-driven Material You theming across 
 
 ```bash
 # 1. Clone the repo
-git clone git@github.com:Eraybeylik/dotfiles.git ~/.dotfiles
+git clone https://github.com/Eraybeylik/dotfiles.git
 
 # 2. Run the install script
 cd ~/.dotfiles
