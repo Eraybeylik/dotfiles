@@ -114,9 +114,9 @@ sudo reboot
 
 | Keybind | Action |
 |---------|--------|
-| `SUPER + Print` | Select region → edit with Satty |
-| `SUPER + SHIFT + Print` | Full screen → edit with Satty |
-| `Print` | Active window → edit with Satty |
+| `SUPER + Print` | Select region → edit with Swappy |
+| `SUPER + SHIFT + Print` | Full screen → edit with Swappy |
+| `Print` | Active window → edit with Swappy |
 
 ### Volume & Media
 
