@@ -46,6 +46,7 @@ PACMAN_PKGS=(
   btop
   burpsuite
   cliphist
+  curl
   dnsmasq
   docker
   docker-buildx
@@ -53,9 +54,12 @@ PACMAN_PKGS=(
   dosfstools
   efibootmgr
   egl-wayland
+  eza
   fastfetch
   fd
+  flameshot
   fuse3
+  fzf
   git
   grub
   gst-plugin-pipewire
@@ -70,7 +74,10 @@ PACMAN_PKGS=(
   jq
   kitty
   kvantum
+  lazydocker
+  lazygit
   less
+  libnotify
   libpulse
   libvirt
   linux
@@ -81,8 +88,10 @@ PACMAN_PKGS=(
   neovim
   network-manager-applet
   networkmanager
+  nodejs
   noto-fonts
   noto-fonts-emoji
+  npm
   nvidia-open-dkms
   nvidia-utils
   nwg-look
@@ -110,7 +119,6 @@ PACMAN_PKGS=(
   qt6ct
   ripgrep
   rofi-wayland
-  satty
   sddm
   sof-firmware
   speedtest-cli
@@ -119,8 +127,10 @@ PACMAN_PKGS=(
   stow
   sudo
   swaync
+  swappy
   thunar
   thunar-archive-plugin
+  tmux
   ttf-fira-code
   ttf-fira-sans
   ttf-nerd-fonts-symbols
@@ -134,6 +144,7 @@ PACMAN_PKGS=(
   wpa_supplicant
   xdg-desktop-portal-hyprland
   xdg-user-dirs
+  xdg-utils
   xxhash
   zoxide
   zram-generator
@@ -157,6 +168,7 @@ AUR_PKGS=(
   grimblast-git
   obsidian
   pycharm
+  sublime-text-4
   vesktop-bin
   visual-studio-code-bin
   waypaper
@@ -202,7 +214,32 @@ yay -S --noconfirm --needed "${AUR_PKGS[@]}"
 success "AUR packages installed"
 
 # ------------------------------------------------------------
-step "5. Services"
+step "5. uv (Python package manager)"
+# ------------------------------------------------------------
+if ! command -v uv >/dev/null 2>&1 && [ ! -x "${HOME}/.local/bin/uv" ]; then
+  info "Installing uv..."
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  success "uv installed"
+else
+  success "uv already installed"
+fi
+
+# ------------------------------------------------------------
+step "6. opencode CLI"
+# ------------------------------------------------------------
+if ! command -v opencode >/dev/null 2>&1 && [ ! -x "${HOME}/.opencode/bin/opencode" ]; then
+  info "Installing opencode..."
+  curl -fsSL https://opencode.ai/install | bash
+  success "opencode installed"
+else
+  success "opencode already installed"
+fi
+
+# Make uv/opencode visible to the rest of this script run (matches ~/.zshrc PATH)
+export PATH="${HOME}/.local/bin:${HOME}/.opencode/bin:${PATH}"
+
+# ------------------------------------------------------------
+step "7. Services"
 # ------------------------------------------------------------
 info "Enabling NetworkManager..."
 sudo systemctl enable --now NetworkManager
@@ -223,14 +260,14 @@ systemctl --user enable --now pipewire pipewire-pulse wireplumber || true
 success "Services configured"
 
 # ------------------------------------------------------------
-step "6. User group memberships"
+step "8. User group memberships"
 # ------------------------------------------------------------
 info "Adding user to required groups..."
 sudo usermod -aG libvirt,docker "${USER}" || true
 success "Group memberships set (re-login required)"
 
 # ------------------------------------------------------------
-step "7. GTK / schema / mime / pixbuf fixes"
+step "9. GTK / schema / mime / pixbuf fixes"
 # ------------------------------------------------------------
 info "Updating schemas and caches..."
 sudo glib-compile-schemas /usr/share/glib-2.0/schemas || true
@@ -239,7 +276,7 @@ sudo gdk-pixbuf-query-loaders --update-cache || true
 success "GTK caches updated"
 
 # ------------------------------------------------------------
-step "8. XDG_DATA_DIRS fix"
+step "10. XDG_DATA_DIRS fix"
 # ------------------------------------------------------------
 if [ -f "${ZPROFILE}" ]; then
   cp "${ZPROFILE}" "${ZPROFILE}.bak.$(date +%s)"
@@ -257,13 +294,13 @@ fi
 success "~/.zprofile updated"
 
 # ------------------------------------------------------------
-step "9. XDG user directories"
+step "11. XDG user directories"
 # ------------------------------------------------------------
 xdg-user-dirs-update || true
 success "XDG directories created"
 
 # ------------------------------------------------------------
-step "10. Dotfiles"
+step "12. Dotfiles"
 # ------------------------------------------------------------
 if [ ! -d "${DOTFILES_DIR}" ]; then
   info "Cloning dotfiles..."
@@ -284,7 +321,7 @@ fi
 if [ -d "${DOTFILES_DIR}" ]; then
   cd "${DOTFILES_DIR}"
   info "Linking dotfiles with stow..."
-  for pkg in btop fastfetch gtk-3.0 gtk-4.0 hyprland kitty matugen nvim rofi starship swaync wallpapers waybar wlogout zsh; do
+  for pkg in btop fastfetch gtk-3.0 gtk-4.0 hyprland kitty matugen nvim rofi starship swaync tmux wallpapers waybar wlogout zsh; do
     [ -d "${pkg}" ] && stow "${pkg}" || warn "Directory '${pkg}' not found, skipping"
   done
   success "Dotfiles linked"
@@ -293,13 +330,13 @@ else
 fi
 
 # ------------------------------------------------------------
-step "11. Wallpaper directory"
+step "13. Wallpaper directory"
 # ------------------------------------------------------------
 mkdir -p "${HOME}/Pictures/Wallpapers"
 success "Wallpaper directory ready"
 
 # ------------------------------------------------------------
-step "12. Default shell"
+step "14. Default shell"
 # ------------------------------------------------------------
 if [ "${SHELL}" != "$(command -v zsh)" ]; then
   info "Setting default shell to zsh..."
@@ -310,9 +347,9 @@ else
 fi
 
 # ------------------------------------------------------------
-step "13. Final checks"
+step "15. Final checks"
 # ------------------------------------------------------------
-for cmd in waybar rofi swaync pavucontrol blueman-manager nmtui brightnessctl playerctl docker virt-manager hyprland matugen fastfetch waypaper; do
+for cmd in waybar rofi swaync pavucontrol blueman-manager nmtui brightnessctl playerctl docker virt-manager hyprland matugen fastfetch waypaper tmux fzf eza flameshot swappy subl opencode uv lazygit lazydocker; do
   if command -v "${cmd}" >/dev/null 2>&1; then
     success "${cmd} found"
   else
