@@ -82,3 +82,9 @@ fi
 
 [ -z "$TMUX" ] && fastfetch
 alias clear='clear && printf "\e[3J"'
+export CLAUDE_OBSIDIAN_VAULT="$HOME/Documents/obsidian-vaults/claude-vault"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/xera/.lmstudio/bin"
+# End of LM Studio CLI section
+
