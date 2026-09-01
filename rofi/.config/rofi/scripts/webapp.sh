@@ -7,7 +7,7 @@ LIST="$HOME/.config/rofi/webapps.list"
 [ -f "$LIST" ] || { notify-send -e "Webapps" "$LIST not found"; exit 1; }
 
 choice=$(grep -v '^\s*#' "$LIST" | grep -v '^\s*$' | cut -d'|' -f1 |
-    rofi -dmenu -i -p "Webapp" -config "$HOME/.config/rofi/applets/rofiSelect.rasi")
+    rofi -dmenu -i -p "Webapp" -theme "$HOME/.config/rofi/applets/menu.rasi")
 
 [ -n "$choice" ] || exit 0
 

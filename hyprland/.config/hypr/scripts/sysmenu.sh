@@ -2,11 +2,11 @@
 # System menu (SUPER+SPACE): one entry point for capture, style, toggles and
 # power actions, omarchy-menu style but built on rofi.
 
-CONFIG="$HOME/.config/rofi/applets/rofiSelect.rasi"
+THEME="$HOME/.config/rofi/applets/menu.rasi"
 SCRIPTS="$HOME/.config/hypr/scripts"
 
 menu() { # $1 prompt, stdin: options
-    rofi -dmenu -i -p "$1" -config "$CONFIG"
+    rofi -dmenu -i -p "$1" -theme "$THEME"
 }
 
 BACK="󰌍  Back"

@@ -3,7 +3,7 @@
 
 KEYBINDS="$HOME/.config/hypr/keybinds.lua"
 
-python3 - "$KEYBINDS" <<'EOF' | rofi -dmenu -i -p "Keybinds" -config "$HOME/.config/rofi/applets/rofiSelect.rasi" >/dev/null
+python3 - "$KEYBINDS" <<'EOF' | rofi -dmenu -i -p "Keybinds" -theme "$HOME/.config/rofi/applets/menu.rasi" -theme-str "window { width: 70em; } listview { lines: 16; }" >/dev/null
 import re, sys
 
 rows = []
