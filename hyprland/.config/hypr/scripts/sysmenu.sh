@@ -72,9 +72,11 @@ while true; do
             esac
             ;;
         *System)
+            # No Suspend entry: this hardware doesn't support s2idle/S3 (see
+            # Arch Linux Hibernate.md) - suspend leaves the NVIDIA GPU
+            # corrupted and the machine needs a hard reset. Hibernate only.
             sub=$(printf '%s\n' \
                 "󰌾  Lock" \
-                "󰤄  Suspend" \
                 "󰋊  Hibernate" \
                 "󰜉  Reboot" \
                 "󰐥  Shutdown" \
@@ -82,7 +84,6 @@ while true; do
                 "$BACK" | menu "System")
             case "$sub" in
                 *Lock)      exec hyprlock ;;
-                *Suspend)   exec systemctl suspend ;;
                 *Hibernate) exec systemctl hibernate ;;
                 *Reboot)    exec systemctl reboot ;;
                 *Shutdown)  exec systemctl poweroff ;;
