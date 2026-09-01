@@ -216,6 +216,10 @@ hl.config({
     cursor = {
         no_hardware_cursors = true,
     },
+
+    xwayland = {
+        force_zero_scaling = true, -- no blurry XWayland apps
+    },
 })
 
 ---------------
