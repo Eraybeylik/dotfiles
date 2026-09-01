@@ -24,6 +24,9 @@ hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("~/.config/rofi/launchers/lau
 -- Web search
 hl.bind(mainMod .. " + I", hl.dsp.exec_cmd("~/.config/rofi/scripts/websearch.sh"))
 
+-- Webapp launcher (chrome --app windows, list in ~/.config/rofi/webapps.list)
+hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("~/.config/rofi/scripts/webapp.sh"))
+
 -- Window management
 hl.bind(mainMod .. " + Q",         hl.dsp.window.close())
 hl.bind(mainMod .. " + M",         hl.dsp.exit())
