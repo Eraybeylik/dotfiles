@@ -20,6 +20,8 @@ Personal Wayland desktop setup — wallpaper-driven Material You theming across 
 
 - **Wallpaper → theme, everywhere.** Matugen extracts a Material You palette from the active wallpaper and regenerates GTK, Kitty, Rofi, Waybar, hyprlock, starship, and an Obsidian snippet in one pass.
 - **Hyprland in Lua.** `hyprland.lua` / `keybinds.lua` / `programs.lua` use Hyprland's native Lua config (0.55+) instead of raw `hyprland.conf` — real variables, loops, and shared program definitions.
+- **One-key system menu.** `SUPER + SPACE` opens a Rofi menu for capture, style, toggles and power — with a live, searchable keybind cheatsheet (`SUPER + K`) generated straight from `keybinds.lua`.
+- **Laptop-aware.** Clamshell mode when docked, a caffeine toggle to hold off idle/lock, and a staged `hypridle` (lock → screen off → suspend).
 - **Reproducible.** `install.sh` takes a bare Arch install to a fully themed Hyprland desktop: packages, AUR, services, dotfiles, shell — no manual steps beyond partitioning/base install.
 - **Fast shell.** Zsh + Zinit in turbo mode, `zsh-vi-mode`, fzf-tab completion, autosuggestions, syntax highlighting.
 
@@ -87,6 +89,9 @@ sudo reboot
 | `SUPER + R` | Launcher (Rofi) |
 | `SUPER + SHIFT + R` | Rofi launcher style changer |
 | `SUPER + I` | Web search (Rofi) |
+| `SUPER + A` | Webapp launcher (sites as `chrome --app` windows) |
+| `SUPER + SPACE` | System menu (capture / style / toggle / power) |
+| `SUPER + K` | Keybind cheatsheet (Rofi, searchable) |
 
 </details>
 
@@ -141,17 +146,21 @@ sudo reboot
 | `SUPER + ESCAPE` | Logout menu (wlogout) |
 | `CTRL + ESCAPE` | Toggle Waybar |
 | `SUPER + SHIFT + B` | Waybar theme selector |
+| `SUPER + CTRL + I` | Caffeine toggle (hold off idle/lock) |
+| `SUPER + CTRL + Z` / `SUPER + CTRL + ALT + Z` | Screen zoom in / reset |
+| `Lid close` / `Lid open` | Clamshell mode when an external monitor is attached |
 
 </details>
 
 <details>
-<summary><strong>Screenshots</strong></summary>
+<summary><strong>Screenshots &amp; OCR</strong></summary>
 
 | Keybind | Action |
 |---|---|
 | `SUPER + Print` | Select region → edit with Swappy |
 | `SUPER + SHIFT + Print` | Full screen → edit with Swappy |
 | `Print` | Active window → edit with Swappy |
+| `SUPER + CTRL + Print` | Select region → OCR text (Tesseract) to clipboard |
 
 </details>
 
@@ -169,6 +178,22 @@ sudo reboot
 
 </details>
 
+## 🧩 Scripts
+
+Everything in `hyprland/.config/hypr/scripts/` and `rofi/.config/rofi/scripts/`, all invoked from keybinds or the system menu:
+
+| Script | Purpose |
+|---|---|
+| `sysmenu.sh` | Rofi system menu — Capture / Style / Toggle / System / Keybinds / Webapps |
+| `keybinds-cheatsheet.sh` | Parses `keybinds.lua` live and shows a searchable Rofi list |
+| `caffeine.sh` | Toggles `hypridle` on/off, reports status to Waybar |
+| `lid.sh` | Clamshell mode — disables the internal panel on lid close only if an external monitor is active |
+| `ocr.sh` | Region select → Tesseract (tur+eng) → clipboard |
+| `wallSelect.sh` | Wallpaper picker with a resized-thumbnail cache, feeds Matugen |
+| `matugenMagick.sh` | Regenerates Rofi preview images and the GTK theme after a wallpaper change |
+| `waybarSelect.sh` | Waybar theme switcher |
+| `webapp.sh` (rofi) | Opens a site from `rofi/webapps.list` as its own `chrome --app` window |
+
 ## 🎨 Theming pipeline
 
 Changing the wallpaper (via `waypaper`, the Rofi wallpaper picker, or `wallSelect.sh`) triggers Matugen, which reads `matugen/.config/matugen/config.toml` and regenerates every downstream template in one run:
@@ -178,6 +203,14 @@ wallpaper ──▶ matugen ──▶ GTK 3/4 · Kitty · Rofi · Waybar · hypr
 ```
 
 Colors land as Hyprland Lua variables too (`hyprland/.config/hypr/matugen/colors.lua`), so window borders, shadows, and glow follow the palette without a reload.
+
+## 🙏 Credits
+
+Some ideas here were ported from other projects and adapted to this stack (own Lua/bash implementations, not copied code):
+
+- [omarchy](https://github.com/basecamp/omarchy) (MIT) — inspiration for the system menu, keybind cheatsheet, clamshell mode, caffeine toggle, and full environment import on session start.
+- [gh0stzk](https://github.com/gh0stzk) — original `wallSelect.sh` wallpaper picker.
+- [The HyDE Project](https://github.com/HyDE-Project/HyDE) — base Rofi launcher styles under `rofi/launchers/`.
 
 ## 📄 License
 
