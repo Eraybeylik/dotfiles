@@ -27,6 +27,9 @@ hl.bind(mainMod .. " + I", hl.dsp.exec_cmd("~/.config/rofi/scripts/websearch.sh"
 -- Keybind cheatsheet
 hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("~/.config/hypr/scripts/keybinds-cheatsheet.sh"))
 
+-- System menu (capture / style / toggle / power)
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("~/.config/hypr/scripts/sysmenu.sh"))
+
 -- Webapp launcher (chrome --app windows, list in ~/.config/rofi/webapps.list)
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("~/.config/rofi/scripts/webapp.sh"))
 
