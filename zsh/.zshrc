@@ -49,7 +49,6 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -1 --color=always $real
 
 # PATH
 export PATH=$PATH:$HOME/.local/bin/
-export PATH=~/.npm-global/bin:$PATH
 export PATH=$PATH:/var/lib/snapd/snap/bin
 export PATH=/home/xera/.opencode/bin:$PATH
 export PATH="$HOME/.local/share/npm-global/bin:$PATH"
@@ -73,7 +72,7 @@ fi
 eval "$(starship init zsh)"
 
 # uv / local env
-. "$HOME/.local/bin/env"
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
 # Auto-start Hyprland on tty1
 if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
