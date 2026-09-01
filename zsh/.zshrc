@@ -88,3 +88,6 @@ export CLAUDE_OBSIDIAN_VAULT="$HOME/Documents/obsidian-vaults/claude-vault"
 export PATH="$PATH:/home/xera/.lmstudio/bin"
 # End of LM Studio CLI section
 
+# nmtui / whiptail (newt) color scheme
+source ~/.config/nmtui-colors.sh
+

@@ -95,7 +95,7 @@
 	    "format-ethernet": "󰈁 ",
 	    "format-disconnected": "󰖪",
 	    "tooltip-format": "{essid}",
-	    "on-click": "kitty --title KittyNmtui sh -c 'sleep 0.1; nmtui'",
+	    "on-click": "kitty --title KittyNmtui sh -c '. ~/.config/nmtui-colors.sh; sleep 0.1; nmtui'",
 	    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
     },
     "custom/pacman": {
