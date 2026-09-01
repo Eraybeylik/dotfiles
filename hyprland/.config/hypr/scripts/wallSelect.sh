@@ -120,23 +120,17 @@ wall_selection=$(find -L "${wall_dir}" -type f \( -iname "*.jpg" -o -iname "*.jp
         fi
     done | $rofi_command)
 
-# SWWW Config
-FPS=60
-TYPE="any"
-DURATION=2
-BEZIER=".43,1.19,1,.4"
-SWWW_PARAMS="--transition-fps $FPS --transition-type $TYPE --transition-duration $DURATION"
-
 # initiate swww if not running
 awww query || awww-daemon &
 
+# Nothing selected (rofi cancelled) -> keep the previous wallpaper untouched
+[[ -n "$wall_selection" ]] || exit 0
 
 # Set wallpaper
-[[ -n "$wall_selection" ]] && awww img "${wall_dir}/${wall_selection}" --transition-fps 60 --transition-type grow --transition-duration 1.5
+awww img "${wall_dir}/${wall_selection}" --transition-fps 60 --transition-type grow --transition-duration 1.5
 printf '%s\n' "${wall_dir}/${wall_selection}" > "$HOME/.cache/last_wallpaper"
-
 
 # Run matugen script
 sleep 0.5
-[[ -n "$wall_selection" ]] && "$scriptsDir/matugenMagick.sh" --dark
+"$scriptsDir/matugenMagick.sh" --dark
 
