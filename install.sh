@@ -129,6 +129,9 @@ PACMAN_PKGS=(
   stow
   sudo
   swaync
+  tesseract
+  tesseract-data-eng
+  tesseract-data-tur
   swappy
   thunar
   thunar-archive-plugin

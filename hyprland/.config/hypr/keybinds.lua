@@ -100,6 +100,9 @@ hl.bind("SUPER + Print",         hl.dsp.exec_cmd("grimblast save area - | swappy
 hl.bind("SUPER + SHIFT + Print", hl.dsp.exec_cmd("grimblast save screen - | swappy -f -"))
 hl.bind("Print",                 hl.dsp.exec_cmd("grimblast save active - | swappy -f -"))
 
+-- OCR: select area, extract text to clipboard
+hl.bind("SUPER + CTRL + Print", hl.dsp.exec_cmd("~/.config/hypr/scripts/ocr.sh"))
+
 -- Volume and Media Control
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -i 5"), { locked = true, repeating = true })
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -d 5"), { locked = true, repeating = true })
