@@ -89,5 +89,5 @@ export PATH="$PATH:/home/xera/.lmstudio/bin"
 # End of LM Studio CLI section
 
 # nmtui / whiptail (newt) color scheme
-source ~/.config/nmtui-colors.sh
+[ -f ~/.config/nmtui-colors.sh ] && source ~/.config/nmtui-colors.sh
 
