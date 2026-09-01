@@ -42,6 +42,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("xdg-user-dirs-update")
+    hl.exec_cmd("udiskie --automount --no-tray")
     hl.exec_cmd("blueman-applet")
     hl.exec_cmd("flameshot")
     -- Machine-local, not tracked in dotfiles; skip silently where absent

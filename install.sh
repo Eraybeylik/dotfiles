@@ -133,6 +133,7 @@ PACMAN_PKGS=(
   thunar
   thunar-archive-plugin
   tmux
+  udiskie
   ttf-fira-code
   ttf-fira-sans
   ttf-iosevka-nerd
