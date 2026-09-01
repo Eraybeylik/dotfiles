@@ -22,7 +22,6 @@ gsettings set org.gnome.desktop.interface gtk-theme ""
 gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3
 
 #-------Imagemagick magick 👀--------------#
-wait $!
 
 # convert and resize the current wallpaper & make it image for rofi with blur
  magick "$wallpaper_path" -strip -resize 1000 -gravity center -extent 1000 -blur "30x30" -quality 90 $HOME/.config/rofi/images/currentWalBlur.thumb
@@ -38,9 +37,7 @@ magick $HOME/.config/rofi/images/currentWal.sqre \( -size 500x500 xc:white -fill
 
 
 # copy the wallpaper in current-wallpaper file
-wait $!
 ln -sf "$wallpaper_path" "$HOME/.local/share/bg"
 
 # send notification after completion
-wait $!
 notify-send -e -h string:x-canonical-private-synchronous:matugen_notif "MatugenMagick" "Matugen & ImageMagick has completed its job" -i $HOME/.local/share/bg
