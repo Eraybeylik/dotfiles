@@ -40,7 +40,8 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("xdg-user-dirs-update")
     hl.exec_cmd("blueman-applet")
     hl.exec_cmd("flameshot")
-    hl.exec_cmd("/usr/bin/python3 ~/.local/bin/news_digest.py")
+    -- Machine-local, not tracked in dotfiles; skip silently where absent
+    hl.exec_cmd("[ -f ~/.local/bin/news_digest.py ] && /usr/bin/python3 ~/.local/bin/news_digest.py")
 end)
 
 -------------------------------
