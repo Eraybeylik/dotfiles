@@ -28,6 +28,11 @@ hl.monitor({
 -------------------
 
 hl.on("hyprland.start", function()
+    -- Full env handoff to systemd/dbus before session services start;
+    -- fixes slow app launches and portal issues (omarchy approach)
+    hl.exec_cmd("systemctl --user import-environment $(env | cut -d'=' -f 1)")
+    hl.exec_cmd("dbus-update-activation-environment --systemd --all")
+
     hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
     hl.exec_cmd("swaync")
     hl.exec_cmd("waybar")
@@ -36,7 +41,6 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
     hl.exec_cmd("hypridle")
-    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
     hl.exec_cmd("xdg-user-dirs-update")
     hl.exec_cmd("blueman-applet")
     hl.exec_cmd("flameshot")
