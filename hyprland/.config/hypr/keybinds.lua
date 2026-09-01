@@ -80,6 +80,9 @@ hl.bind("SUPER + ESCAPE", hl.dsp.exec_cmd("~/.config/hypr/scripts/wlogout.sh"))
 -- Toggle waybar
 hl.bind("CTRL + ESCAPE", hl.dsp.exec_cmd("killall waybar || waybar"))
 
+-- Caffeine: keep screen awake (disables hypridle until toggled back)
+hl.bind(mainMod .. " + CTRL + I", hl.dsp.exec_cmd("~/.config/hypr/scripts/caffeine.sh toggle"))
+
 -- Waybar theme selector
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("~/.config/hypr/scripts/waybarSelect.sh"))
 

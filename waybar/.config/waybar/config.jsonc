@@ -20,6 +20,7 @@
 		 "memory",
      "network",
 		 "pulseaudio",
+		 "custom/caffeine",
 		 "clock",
 		 "clock#simpleclock",
 		 "tray"
@@ -105,6 +106,15 @@
 	 "custom/sep": {
 		 "format": "|",
 		 "tooltip": false
+	 },
+	 "custom/caffeine": {
+		 "format": "{}",
+		 "return-type": "json",
+		 "interval": "once",
+		 "exec": "~/.config/hypr/scripts/caffeine.sh status",
+		 "on-click": "~/.config/hypr/scripts/caffeine.sh toggle",
+		 "signal": 9,
+		 "tooltip": true
 	 },
 	 "custom/launcher": {
 		 "tooltip": false,
