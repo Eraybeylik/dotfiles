@@ -83,6 +83,15 @@ hl.bind("CTRL + ESCAPE", hl.dsp.exec_cmd("killall waybar || waybar"))
 -- Caffeine: keep screen awake (disables hypridle until toggled back)
 hl.bind(mainMod .. " + CTRL + I", hl.dsp.exec_cmd("~/.config/hypr/scripts/caffeine.sh toggle"))
 
+-- Screen zoom (accessibility / presentations)
+hl.bind(mainMod .. " + CTRL + Z", function()
+    local zoom = hl.get_config("cursor.zoom_factor") or 1
+    hl.config({ cursor = { zoom_factor = zoom + 1 } })
+end)
+hl.bind(mainMod .. " + CTRL + ALT + Z", function()
+    hl.config({ cursor = { zoom_factor = 1 } })
+end)
+
 -- Waybar theme selector
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("~/.config/hypr/scripts/waybarSelect.sh"))
 
