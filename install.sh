@@ -96,6 +96,8 @@ PACMAN_PKGS=(
   nvidia-utils
   nwg-look
   os-prober
+  otf-geist-mono-nerd
+  pacman-contrib
   pamixer
   pavucontrol
   pipewire
@@ -133,6 +135,8 @@ PACMAN_PKGS=(
   tmux
   ttf-fira-code
   ttf-fira-sans
+  ttf-iosevka-nerd
+  ttf-jetbrains-mono-nerd
   ttf-nerd-fonts-symbols
   unzip
   virt-manager
@@ -349,7 +353,7 @@ fi
 # ------------------------------------------------------------
 step "15. Final checks"
 # ------------------------------------------------------------
-for cmd in waybar rofi swaync pavucontrol blueman-manager nmtui brightnessctl playerctl docker virt-manager hyprland matugen fastfetch waypaper tmux fzf eza flameshot swappy subl opencode uv lazygit lazydocker; do
+for cmd in waybar rofi swaync pavucontrol blueman-manager nmtui brightnessctl playerctl docker virt-manager Hyprland matugen fastfetch waypaper tmux fzf eza flameshot swappy subl opencode uv lazygit lazydocker checkupdates; do
   if command -v "${cmd}" >/dev/null 2>&1; then
     success "${cmd} found"
   else
