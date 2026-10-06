@@ -10,14 +10,14 @@
 hl.monitor({
     output   = "HDMI-A-1",
     mode     = "1920x1080@180",
-    position = "1920x0",
+    position = "0x0",
     scale    = 1,
 })
 
 hl.monitor({
     output   = "eDP-1",
     mode     = "1920x1080@144",
-    position = "0x0",
+    position = "1920x0",
     scale    = 1,
 })
 
@@ -179,6 +179,7 @@ hl.curve("menu_decel", { type = "bezier", points = { {0.05, 0.82}, {0, 1}       
 hl.curve("menu_accel", { type = "bezier", points = { {0.20, 0},    {0.82, 0.10} } })
 hl.curve("md3_decel",  { type = "bezier", points = { {0.05, 0.80}, {0.10, 0.97} } })
 hl.curve("md3_accel",  { type = "bezier", points = { {0.20, 0},    {0.80, 0.08} } })
+hl.curve("mac_ease",   { type = "bezier", points = { {0.25, 1},    {0.5, 1}     } })
 hl.curve("linear",     { type = "bezier", points = { {0, 0},       {1, 1}       } })
 
 hl.animation({ leaf = "windows",          enabled = true, speed = 5,   bezier = "overshot",   style = "slide" })
@@ -193,7 +194,7 @@ hl.animation({ leaf = "fadeLayersOut",    enabled = true, speed = 1.8, bezier = 
 hl.animation({ leaf = "border",           enabled = true, speed = 5,   bezier = "default" })
 hl.animation({ leaf = "fade",             enabled = true, speed = 1.8, bezier = "md3_decel" })
 hl.animation({ leaf = "fadeDim",          enabled = true, speed = 5,   bezier = "default" })
-hl.animation({ leaf = "workspaces",       enabled = true, speed = 6,   bezier = "curve" })
+hl.animation({ leaf = "workspaces",       enabled = true, speed = 4.5, bezier = "mac_ease", style = "slide" })
 hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 2.3, bezier = "md3_decel", style = "slidefadevert 15%" })
 hl.animation({ leaf = "shadowangle",      enabled = true, speed = 100, bezier = "linear", style = "loop" })
 hl.animation({ leaf = "glowangle",        enabled = true, speed = 100, bezier = "linear", style = "loop" })
@@ -252,9 +253,9 @@ hl.gesture({
 
 hl.config({
     gestures = {
-        workspace_swipe_distance           = 1200, -- higher = more finger travel per workspace
-        workspace_swipe_min_speed_to_force = 60,   -- higher = quick flicks don't insta-switch
-        workspace_swipe_cancel_ratio       = 0.6,  -- must swipe 60% of distance to commit
+        workspace_swipe_distance           = 900,  -- higher = more finger travel per workspace
+        workspace_swipe_min_speed_to_force = 50,   -- higher = quick flicks don't insta-switch
+        workspace_swipe_cancel_ratio       = 0.5,  -- must swipe 50% of distance to commit
     },
 })
 
