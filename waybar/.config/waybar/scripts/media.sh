@@ -8,7 +8,7 @@ MAX=22
 tmp="$(mktemp -d -t waybar-media.XXXXXX)"
 # Kill playerctl/cava too, otherwise they outlive waybar restarts
 trap 'pkill -P $$; rm -rf "$tmp"' EXIT
-trap 'exit 0' TERM INT
+trap 'exit 0' TERM INT HUP PIPE
 
 cat >"$tmp/cava.conf" <<CONF
 [general]
