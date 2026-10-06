@@ -93,7 +93,7 @@
   background-color: transparent;
 }
 
-/* Media text + spectrum: no letter-spacing, it doubled the pill width */
+/* Media text: no letter-spacing, it doubled the pill width */
 #custom-media {
   letter-spacing: 0px;
 }
