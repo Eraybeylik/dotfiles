@@ -13,7 +13,7 @@
 	 "gtk-layer-shell": true,
 	 "passthrough": false,
 	 "fixed-center": true,
-	 "modules-left": ["custom/launcher", "hyprland/workspaces", "wlr/taskbar", "group/utils"],
+	 "modules-left": ["custom/launcher", "hyprland/workspaces", "group/utils"],
 	 "modules-center": ["group/media", "custom/notification", "battery"],
 	 "modules-right": [
 		 "group/hardware",
@@ -135,26 +135,58 @@
 		 "on-click-right": "swaync-client -t -sw"
 	 },
 	 "hyprland/workspaces": {
-    "on-click": "activate",
-    "format": "{name}",
-    "all-outputs": false,
-    "disable-scroll": false,
-    "active-only": false,
-    "persistent-workspaces": {
-        "*": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    }
-   },
-	 "wlr/taskbar": {
-		 "format": "{icon}",
-		 "rotate": 0,
-		 "icon-size": 18,
-		 "spacing": 0,
-		 "tooltip-format": "{title}",
 		 "on-click": "activate",
-		 "on-click-middle": "close",
-		 "app_ids-mapping": {
-			 "firefoxdeveloperedition": "firefox-developer-edition"
-		 }
+		 // only occupied + active workspaces, each with its app icons
+		 // icons start with a no-break space: a normal space lets GTK wrap the label and grow the bar
+		 "format": "{name}{windows}",
+		 "format-window-separator": "",
+		 "window-rewrite-default": " ",
+		 "window-rewrite": {
+			 "class<kitty>": " ",
+			 "class<[Gg]oogle-chrome>": " ",
+			 "class<firefox>": " 󰈹",
+			 "class<chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default>": " 󰖣",
+			 "class<chrome-cinhimbnkkaeohfgghhklpknlkffjgod-Default>": " 󰗃",
+			 "class<chrome-olhlgjciiahedchpagffikcmgfakknfd-Default>": " ",
+			 "class<chrome-gdjmlkllihelgjmceikmaaddbjkcbnoe-Default>": " ",
+			 "class<chrome-hbblfifohofgngfbjbiimbbcimepbdcb-Default>": " 󰚩",
+			 "class<chrome-dbcelemodfinaiomagjnllgjioiaolnj-Default>": " 󰏊",
+			 "class<md.obsidian.Obsidian|obsidian>": " ",
+			 "class<com.microsoft.VSCode|[Cc]ode|code-oss>": " ",
+			 "class<jetbrains-pycharm.*>": " ",
+			 "class<opencode-desktop|[Aa]ntigravity>": " 󰅩",
+			 "class<[Ss]ubl|sublime_text>": " ",
+			 "class<claude-desktop|[Cc]laude>": " ",
+			 "class<discord|vesktop>": " 󰙯",
+			 "class<thunar|Thunar>": " ",
+			 "class<file-roller|org.gnome.FileRoller>": " ",
+			 "class<Bitwarden|bitwarden>": " 󰌆",
+			 "class<[Aa]nki>": " 󰂺",
+			 "class<libreoffice-writer>": " ",
+			 "class<libreoffice-calc>": " ",
+			 "class<libreoffice-impress>": " ",
+			 "class<libreoffice-.*|soffice>": " ",
+			 "class<org.qbittorrent.qBittorrent|qbittorrent>": " 󰇚",
+			 "class<virt-manager|.*[Vv]irt-viewer|remote-viewer>": " 󰍹",
+			 "class<org.remmina.Remmina|[Aa]ny[Dd]esk|anydesk>": " 󰢹",
+			 "class<org.kde.gwenview>": " ",
+			 "class<org.gnome.Loupe>": " ",
+			 "class<qimgv|imv>": " 󰋩",
+			 "class<mpv>": " ",
+			 "class<vlc>": " 󰕼",
+			 "class<pavucontrol|org.pulseaudio.pavucontrol>": " 󰕾",
+			 "class<blueman-manager|.*blueman.*>": " ",
+			 "class<org.kde.kdeconnect.*>": " ",
+			 "class<nwg-look>": " ",
+			 "class<kvantummanager|qt5ct|qt6ct>": " ",
+			 "class<waypaper>": " 󰸉",
+			 "class<warp-taskbar|com.cloudflare.*>": " ",
+			 "class<com.raspberrypi.rpi-imager|rpi-imager>": " 󰐿",
+			 "class<5ire>": " 󰚩"
+		 },
+		 "all-outputs": false,
+		 "disable-scroll": false,
+		 "active-only": false
 	 },
 	 "tray": {
 		 "show-passive-items": true,
