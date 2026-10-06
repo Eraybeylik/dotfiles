@@ -12,6 +12,8 @@ Personal Wayland desktop setup — wallpaper-driven Material You theming across 
 [![Shell](https://img.shields.io/badge/Shell-Zsh%20%2B%20Zinit-89e051)](https://zsh.org)
 [![Last Commit](https://img.shields.io/github/last-commit/Eraybeylik/dotfiles)](https://github.com/Eraybeylik/dotfiles/commits/main)
 
+<img src="assets/screenshot.png" alt="Desktop screenshot" width="100%">
+
 </div>
 
 ---
@@ -21,7 +23,8 @@ Personal Wayland desktop setup — wallpaper-driven Material You theming across 
 - **Wallpaper → theme, everywhere.** Matugen extracts a Material You palette from the active wallpaper and regenerates GTK, Kitty, Rofi, Waybar, hyprlock, starship, and an Obsidian snippet in one pass.
 - **Hyprland in Lua.** `hyprland.lua` / `keybinds.lua` / `programs.lua` use Hyprland's native Lua config (0.55+) instead of raw `hyprland.conf` — real variables, loops, and shared program definitions.
 - **One-key system menu.** `SUPER + SPACE` opens a Rofi menu for capture, style, toggles and power — with a live, searchable keybind cheatsheet (`SUPER + K`) generated straight from `keybinds.lua`.
-- **Laptop-aware.** Clamshell mode when docked, a caffeine toggle to hold off idle/lock, and a staged `hypridle` (lock → screen off → suspend).
+- **Minimal Waybar.** Pill groups with hover drawers, app icons on occupied workspaces, now-playing for any MPRIS player (YouTube Music in Chrome included), repo + AUR update count, NVIDIA GPU stats that never wake a sleeping dGPU.
+- **Laptop-aware.** Clamshell mode when docked, a caffeine toggle to hold off idle/lock, a staged `hypridle` (lock → screen off), automatic power profile (balanced, power-saver on battery ≤30%), and brightness synced to external monitors over DDC/CI.
 - **Reproducible.** `install.sh` takes a bare Arch install to a fully themed Hyprland desktop: packages, AUR, services, dotfiles, shell — no manual steps beyond partitioning/base install.
 - **Fast shell.** Zsh + Zinit in turbo mode, `zsh-vi-mode`, fzf-tab completion, autosuggestions, syntax highlighting.
 
@@ -30,7 +33,7 @@ Personal Wayland desktop setup — wallpaper-driven Material You theming across 
 | Config | Description |
 |---|---|
 | `hyprland` | Compositor, keybinds, hypridle, hyprlock (Lua config) |
-| `waybar` | Status bar |
+| `waybar` | Status bar — grouped pills, hover drawers, workspace app icons |
 | `kitty` | Terminal emulator |
 | `rofi` | Application launcher |
 | `swaync` | Notification center |
@@ -67,9 +70,9 @@ sudo reboot
 1. Update the system and install `yay`
 2. Install all pacman + AUR packages (Hyprland, GTK stack, Nvidia drivers, dev tools, apps)
 3. Bootstrap `uv` and `opencode` via their official installers
-4. Enable services (NetworkManager, Bluetooth, Docker, SDDM, PipeWire)
+4. Enable services (NetworkManager, Bluetooth, power-profiles-daemon, Docker, SDDM, PipeWire) and load `i2c-dev` for external-monitor brightness
 5. Apply GTK/GSettings/XDG fixes
-6. Clone (or update) this repo and symlink every package with `stow`
+6. Clone (or update) this repo, symlink every package with `stow`, and install `reboot-to-windows` (root-owned copy + validated sudoers rule)
 7. Set Zsh as the default shell
 8. Run a final check for every tool it just installed
 
@@ -184,15 +187,36 @@ Everything in `hyprland/.config/hypr/scripts/` and `rofi/.config/rofi/scripts/`,
 
 | Script | Purpose |
 |---|---|
-| `sysmenu.sh` | Rofi system menu — Capture / Style / Toggle / System / Keybinds / Webapps |
+| `sysmenu.sh` | Rofi system menu — Capture / Style / Toggle / System (incl. reboot to Windows / BIOS) / Keybinds / Webapps |
 | `keybinds-cheatsheet.sh` | Parses `keybinds.lua` live and shows a searchable Rofi list |
 | `caffeine.sh` | Toggles `hypridle` on/off, reports status to Waybar |
 | `lid.sh` | Clamshell mode — disables the internal panel on lid close only if an external monitor is active |
+| `power-auto.sh` | Balanced by default, power-saver on battery at ≤30%, back to balanced when plugged in or above 35%; a manual pick sticks until the next transition |
 | `ocr.sh` | Region select → Tesseract (tur+eng) → clipboard |
 | `wallSelect.sh` | Wallpaper picker with a resized-thumbnail cache, feeds Matugen |
 | `matugenMagick.sh` | Regenerates Rofi preview images and the GTK theme after a wallpaper change |
 | `waybarSelect.sh` | Waybar theme switcher |
 | `webapp.sh` (rofi) | Opens a site from `rofi/webapps.list` as its own `chrome --app` window |
+
+## 📊 Waybar
+
+```
+[launcher][workspaces + app icons][updates · weather · color picker]   [now playing][notifications][battery]   [cpu ▸ ram · temp · gpu][wifi · bt][volume ▸ mic · brightness][profile · caffeine][date][time][tray]
+```
+
+`▸` groups are drawers: hover to slide out the rest. Scripts live in `waybar/.config/waybar/scripts/`:
+
+| Script / module | Behavior |
+|---|---|
+| `updates.sh` | Repo + AUR update count (`checkupdates`, `yay -Qua`), hidden when up to date, package list in tooltip |
+| `media.sh` | Now playing for any MPRIS player, cleaned 22-char title, hidden when stopped. Click play/pause, scroll next/prev, right click opens the swaync media panel; hover shows ⏮ ⏯ ⏭ |
+| `gpu.sh` | NVIDIA usage / temp / VRAM; checks runtime PM first so polling never wakes a suspended dGPU |
+| `brightness.sh` | Scroll changes the laptop panel; external monitors follow over DDC/CI (`ddcutil`) after a short debounce |
+| `Weather.py` | wttr.in with retry on startup, keyword-matched icons |
+| workspaces | Only occupied + active workspaces, each with Nerd Font app logos (`window-rewrite`) |
+| clock | Calendar with week numbers (scroll months, right click year view); time tooltip shows world clocks |
+| network | Tooltip with IP and ↓/↑ speed; right click toggles the speed inline |
+| power-profiles-daemon | Click to cycle performance / balanced / power-saver |
 
 ## 🎨 Theming pipeline
 

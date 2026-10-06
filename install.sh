@@ -101,6 +101,7 @@ PACMAN_PKGS=(
   pacman-contrib
   pamixer
   pavucontrol
+  pciutils
   pipewire
   pipewire-alsa
   pipewire-jack
