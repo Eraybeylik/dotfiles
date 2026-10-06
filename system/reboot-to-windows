@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# UEFI BootNext'i Windows Boot Manager'a ayarlayıp yeniden başlatır.
+# Tek seferlik: bir sonraki boot Windows, sonraki açılışlar yine GRUB.
+set -euo pipefail
+
+num=$(efibootmgr | sed -n 's/^Boot\([0-9A-Fa-f]\{4\}\)\*\? .*Windows Boot Manager.*/\1/p' | head -1)
+
+if [[ -z "$num" ]]; then
+    echo "Windows Boot Manager UEFI girişi bulunamadı" >&2
+    exit 1
+fi
+
+efibootmgr --bootnext "$num" >/dev/null
+systemctl reboot

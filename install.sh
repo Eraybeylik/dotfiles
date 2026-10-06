@@ -341,6 +341,20 @@ if [ -d "${DOTFILES_DIR}" ]; then
     [ -d "${pkg}" ] && stow "${pkg}" || warn "Directory '${pkg}' not found, skipping"
   done
   success "Dotfiles linked"
+
+  # Copied (not symlinked) and root-owned: it runs via passwordless sudo, so a
+  # user-writable target would be a root escalation path.
+  info "Installing reboot-to-windows (sysmenu) + sudoers rule..."
+  sudo install -m 755 -o root -g root system/reboot-to-windows /usr/local/bin/reboot-to-windows
+  sudoers_tmp="$(mktemp)"
+  printf '%s ALL=(root) NOPASSWD: /usr/local/bin/reboot-to-windows\n' "${USER}" >"${sudoers_tmp}"
+  if sudo visudo -cf "${sudoers_tmp}" >/dev/null; then
+    sudo install -m 440 -o root -g root "${sudoers_tmp}" /etc/sudoers.d/reboot-to-windows
+    success "reboot-to-windows installed"
+  else
+    warn "sudoers rule failed validation, skipping"
+  fi
+  rm -f "${sudoers_tmp}"
 else
   warn "Dotfiles directory not found, skipping stow"
 fi
