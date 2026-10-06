@@ -79,17 +79,21 @@ while true; do
                 "󰌾  Lock" \
                 "󰋊  Hibernate" \
                 "󰜉  Reboot" \
+                "󰖳  Reboot to Windows" \
+                "󰢻  Reboot to BIOS" \
                 "󰐥  Shutdown" \
                 "󰗽  Logout" \
                 "$BACK" | menu "System")
             case "$sub" in
-                *Lock)      exec hyprlock ;;
-                *Hibernate) exec systemctl hibernate ;;
-                *Reboot)    exec systemctl reboot ;;
-                *Shutdown)  exec systemctl poweroff ;;
-                *Logout)    hyprctl dispatch 'hl.dsp.exit()' 2>/dev/null || hyprctl dispatch exit; exit 0 ;;
-                "$BACK")    continue ;;
-                *)          exit 0 ;;
+                *Lock)         exec hyprlock ;;
+                *Hibernate)    exec systemctl hibernate ;;
+                *"to Windows") exec sudo /usr/local/bin/reboot-to-windows ;;
+                *"to BIOS")    exec systemctl reboot --firmware-setup ;;
+                *Reboot)       exec systemctl reboot ;;
+                *Shutdown)     exec systemctl poweroff ;;
+                *Logout)       hyprctl dispatch 'hl.dsp.exit()' 2>/dev/null || hyprctl dispatch exit; exit 0 ;;
+                "$BACK")       continue ;;
+                *)             exit 0 ;;
             esac
             ;;
         *Keybinds)
