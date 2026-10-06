@@ -27,8 +27,8 @@
 
 
 #workspaces button {
-  padding: 0.3rem 0.6rem;
-  margin: 0.4rem 0.25rem;
+  padding: 2px 9px;
+  margin: 5px 3px;
   border-radius: 6px;
   background-color: @surface;
   color: @on_surface;
@@ -40,8 +40,8 @@
 }
 
 #workspaces button.active {
-  background-color: @surface;
-  color: @primary;
+  background-color: @primary;
+  color: @on_primary;
 }
 
 #workspaces button.urgent {
@@ -54,8 +54,8 @@
     text-shadow: none;
     padding: 0px;
     border-radius: 3px;
-    margin-top: 0.4rem;
-    margin-bottom: 0.4rem;
+    margin-top: 0px;
+    margin-bottom: 0px;
     margin-left: 0px;
     padding-left: 3px;
     padding-right: 3px;
@@ -85,30 +85,76 @@
 
 
 #clock,
-#pulseaudio,
-#network,
 #custom-logo,
 #custom-launcher,
 #custom-spotify,
 #custom-notification,
 #battery,
-#cpu,
 #tray,
-#memory,
 #taskbar,
-#mpris {
-  padding: 0.3rem 0.6rem;
-  margin: 0.4rem 0.25rem;
+#custom-media,
+#utils,
+#hardware,
+#connect,
+#audio,
+#power {
+  padding: 2px 9px;
+  margin: 5px 3px;
   border-radius: 6px;
   background-color: @surface;
 }
 
-#mpris.playing {
+/*--------------Groups: one pill, children flat--------------*/
+#utils,
+#hardware,
+#connect,
+#audio,
+#power {
+  padding: 0px 3px;
+}
+
+#utils > widget > *,
+#hardware > widget > *,
+#connect > widget > *,
+#audio > widget > *,
+#power > widget > *,
+#hardware revealer widget > *,
+#audio revealer widget > * {
+  padding: 2px 6px;
+  margin: 0px;
+  border-radius: 6px;
+  background-color: transparent;
+}
+
+/* Media text + spectrum: no letter-spacing, it doubled the pill width */
+#custom-media {
+  letter-spacing: 0px;
+}
+
+#custom-media.playing {
   color: @primary;
 }
 
-#mpris.paused {
-  color: @error;
+#custom-media.paused {
+  color: @outline;
+}
+
+/*--------------Media drawer buttons--------------*/
+#custom-media-prev,
+#custom-media-toggle,
+#custom-media-next {
+  padding: 2px 8px;
+  margin: 5px 1px;
+  border-radius: 6px;
+  background-color: @surface;
+  color: @primary;
+}
+
+#custom-media-prev:hover,
+#custom-media-toggle:hover,
+#custom-media-next:hover {
+  background-color: @primary;
+  color: @on_primary;
 }
 
 #custom-sep {
@@ -120,11 +166,19 @@
     color: @on_surface;
 }
 
-#battery.critical,
-#battery.warning,
-#battery.full,
-#battery.plugged {
-    color: @error;
+#battery.charging,
+#battery.plugged,
+#battery.full {
+    color: @primary;
+}
+
+#battery.warning:not(.charging) {
+    color: @tertiary;
+}
+
+#battery.critical:not(.charging) {
+    color: @on_error;
+    background-color: @error;
 }
 
 
@@ -160,41 +214,75 @@
 
 
 #custom-launcher {
-  padding: 0rem 0.8rem;
+  padding: 0px 12px;
+  margin-left: 6px;
   color: @error;
 }
 
-#custom-pacman, #custom-colorpicker, #custom-weather {
-  padding: 0.3rem 0.6rem;
-  border-right: none;
-  border-left: none;
-  margin-top: 0.4rem;
-  margin-bottom: 0.4rem;
-  margin-left: 0rem;
-  margin-right: 0rem;
-  background-color: @surface;
+#tray {
+  margin-right: 6px;
+}
+
+#custom-caffeine,
+#power-profiles-daemon {
+  color: @on_surface_variant;
+}
+
+#custom-caffeine.active,
+#power-profiles-daemon.performance {
+  color: @on_primary;
+  background-color: @primary;
+}
+
+#power-profiles-daemon.power-saver {
+  color: @tertiary;
 }
 
 #custom-pacman {
   color: @primary;
-  border-radius: 6px 0px 0px 6px;
-  border-right: none;
-  border-left: none;
 }
 
+#custom-weather,
 #custom-colorpicker {
   color: @on_surface;
-  border-radius: 0px 6px 6px 0px;
-  border-right: none;
-  border-left: none;
 }
 
-#network {
+#temperature,
+#custom-gpu {
+  color: @secondary;
+}
+
+#temperature.critical,
+#custom-gpu.hot {
+  color: @error;
+}
+
+#custom-gpu.off {
+  color: @outline;
+}
+
+#network,
+#bluetooth.connected {
   color: @primary;
 }
 
-#network.disconnected {
+#bluetooth,
+#bluetooth.off,
+#bluetooth.disabled {
+  color: @outline;
+}
+
+#network.disconnected,
+#pulseaudio.mic.source-muted {
   color: @error;
+}
+
+#pulseaudio.mic {
+  color: @on_surface_variant;
+}
+
+#custom-brightness {
+  color: @tertiary;
 }
 
 tooltip {

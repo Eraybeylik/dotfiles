@@ -47,6 +47,7 @@ PACMAN_PKGS=(
   burpsuite
   cliphist
   curl
+  ddcutil
   dnsmasq
   docker
   docker-buildx
@@ -106,6 +107,7 @@ PACMAN_PKGS=(
   pipewire-pulse
   playerctl
   polkit-kde-agent
+  power-profiles-daemon
   python-pyquery
   python-requests
   qemu-audio-spice
@@ -254,6 +256,12 @@ sudo systemctl enable --now NetworkManager
 
 info "Enabling Bluetooth..."
 sudo systemctl enable --now bluetooth
+
+info "Loading i2c-dev for external monitor brightness (ddcutil)..."
+echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf >/dev/null
+
+info "Enabling power-profiles-daemon..."
+sudo systemctl enable --now power-profiles-daemon
 
 info "Enabling Docker..."
 sudo systemctl enable --now docker

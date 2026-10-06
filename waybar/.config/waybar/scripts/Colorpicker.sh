@@ -30,6 +30,11 @@ limit=10
 # Output for Waybar JSON module
 [[ $# -eq 1 && $1 == "-j" ]] && {
   text="$(head -n 1 "$loc/colors")"
+  # Empty history: show a neutral picker icon instead of invalid <span color=''>
+  [[ -z "$text" ]] && {
+    echo '{ "text":"󰈊", "tooltip":"No colors picked yet - click to pick" }'
+    exit
+  }
   mapfile -t allcolors < <(tail -n +2 "$loc/colors")
   tooltip="<b>   COLORS</b>\n\n"
   tooltip+="-> <b>$text</b>  <span color='$text'></span>\n"

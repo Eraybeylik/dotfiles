@@ -13,30 +13,126 @@
 	 "gtk-layer-shell": true,
 	 "passthrough": false,
 	 "fixed-center": true,
-	 "modules-left": ["custom/launcher", "hyprland/workspaces", "wlr/taskbar", "custom/pacman", "custom/weather", "custom/colorpicker"],
-	 "modules-center": ["mpris","custom/notification", "battery"],
+	 "modules-left": ["custom/launcher", "hyprland/workspaces", "wlr/taskbar", "group/utils"],
+	 "modules-center": ["group/media", "custom/notification", "battery"],
 	 "modules-right": [
-		 "cpu",
-		 "memory",
-     "network",
-		 "pulseaudio",
-		 "custom/caffeine",
+		 "group/hardware",
+		 "group/connect",
+		 "group/audio",
+		 "group/power",
 		 "clock",
 		 "clock#simpleclock",
 		 "tray"
 	 ],
 
-	 "mpris": {
-		 "player": "spotify",
-		 "dynamic-order": ["artist", "title"],
-		 "format": "{player_icon} {dynamic}",
-		 "format-paused": "{status_icon} <i>{dynamic}</i>",
-		 "status-icons": {
-			 "paused": ""
-		 },
-		 "player-icons": {
-			 "default": ""
+	 // ---------- groups (drawer = extra modules slide out on hover) ----------
+	 "group/utils": {
+		 "orientation": "horizontal",
+		 "modules": ["custom/pacman", "custom/weather", "custom/colorpicker"]
+	 },
+	 "group/hardware": {
+		 "orientation": "horizontal",
+		 "drawer": { "transition-duration": 300, "transition-left-to-right": false },
+		 "modules": ["cpu", "memory", "temperature", "custom/gpu"]
+	 },
+	 "group/connect": {
+		 "orientation": "horizontal",
+		 "modules": ["network", "bluetooth"]
+	 },
+	 "group/audio": {
+		 "orientation": "horizontal",
+		 "drawer": { "transition-duration": 300, "transition-left-to-right": false },
+		 "modules": ["pulseaudio", "pulseaudio#mic", "custom/brightness"]
+	 },
+	 "group/media": {
+		 "orientation": "horizontal",
+		 "drawer": { "transition-duration": 300, "transition-left-to-right": true },
+		 "modules": ["custom/media", "custom/media-prev", "custom/media-toggle", "custom/media-next"]
+	 },
+	 "group/power": {
+		 "orientation": "horizontal",
+		 "modules": ["power-profiles-daemon", "custom/caffeine"]
+	 },
+
+	 "temperature": {
+		 "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+		 "input-filename": "temp1_input",
+		 "critical-threshold": 80,
+		 "interval": 5,
+		 "format": " {temperatureC}°",
+		 "tooltip-format": "CPU (Tctl): {temperatureC}°C"
+	 },
+	 "custom/gpu": {
+		 "exec": "~/.config/waybar/scripts/gpu.sh",
+		 "return-type": "json",
+		 "interval": 5,
+		 "tooltip": true
+	 },
+	 "bluetooth": {
+		 "format": "󰂯",
+		 "format-off": "󰂲",
+		 "format-disabled": "󰂲",
+		 "format-connected": "󰂱",
+		 "format-connected-battery": "󰂱 {device_battery_percentage}%",
+		 "tooltip-format": "{controller_alias}: {status}",
+		 "tooltip-format-connected": "{controller_alias}\n\n{device_enumerate}",
+		 "tooltip-format-enumerate-connected": "{device_alias}",
+		 "tooltip-format-enumerate-connected-battery": "{device_alias} ({device_battery_percentage}%)",
+		 "on-click": "blueman-manager",
+		 "on-click-right": "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
+	 },
+	 "pulseaudio#mic": {
+		 "format": "{format_source}",
+		 "format-source": "󰍬",
+		 "format-source-muted": "󰍭",
+		 "tooltip-format": "Mic: {source_volume}% ({source_desc})",
+		 "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+		 "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SOURCE@ 5%+",
+		 "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-"
+	 },
+	 "custom/brightness": {
+		 "exec": "~/.config/waybar/scripts/brightness.sh get",
+		 "return-type": "json",
+		 "interval": 30,
+		 "signal": 10,
+		 "on-scroll-up": "~/.config/waybar/scripts/brightness.sh up",
+		 "on-scroll-down": "~/.config/waybar/scripts/brightness.sh down"
+	 },
+	 "custom/media-prev": {
+		 "format": "󰒮",
+		 "tooltip": false,
+		 "on-click": "playerctl previous"
+	 },
+	 "custom/media-toggle": {
+		 "exec": "~/.config/waybar/scripts/media-toggle.sh",
+		 "format": "{}",
+		 "tooltip": false,
+		 "on-click": "playerctl play-pause"
+	 },
+	 "custom/media-next": {
+		 "format": "󰒭",
+		 "tooltip": false,
+		 "on-click": "playerctl next"
+	 },
+	 "power-profiles-daemon": {
+		 "format": "{icon}",
+		 "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+		 "format-icons": {
+			 "default": "󰗑",
+			 "performance": "󰓅",
+			 "balanced": "󰗑",
+			 "power-saver": "󰌪"
 		 }
+	 },
+
+	 "custom/media": {
+		 "exec": "~/.config/waybar/scripts/media.sh",
+		 "return-type": "json",
+		 "escape": true,
+		 "on-click": "playerctl play-pause",
+		 "on-scroll-up": "playerctl previous",
+		 "on-scroll-down": "playerctl next",
+		 "on-click-right": "swaync-client -t -sw"
 	 },
 	 "hyprland/workspaces": {
     "on-click": "activate",
@@ -65,15 +161,27 @@
 		 "spacing": 10
 	 },
 	 "clock#simpleclock": {
-		 "tooltip": false,
+		 "tooltip": true,
+		 "timezones": ["Europe/Istanbul", "Etc/UTC", "Europe/London", "America/New_York", "Asia/Tokyo"],
+		 "tooltip-format": "{tz_list}",
 		 "format": " {:%H:%M}"
 	 },
 	 "clock": {
 		 "format": " {:L%a %d %b}",
 		 "calendar": {
 			 "mode": "month",
-			 "mode-mon-col": 1,
-			 "on-scroll": 1
+			 "mode-mon-col": 3,
+			 "weeks-pos": "left",
+			 "on-scroll": 1,
+			 "format": {
+				 "weeks": "<i>W{}</i>",
+				 "today": "<b><u>{}</u></b>"
+			 }
+		 },
+		 "actions": {
+			 "on-click-right": "mode",
+			 "on-scroll-up": "shift_down",
+			 "on-scroll-down": "shift_up"
 		 },
 		 "tooltip-format": "<span font='GeistMono Nerd Font 14'><tt><small>{calendar}</small></tt></span>"
 	 },
@@ -92,15 +200,20 @@
 			 "headphone": "",
 			 "default": ["", "", ""]
 		 },
-		 "on-click": "pavucontrol"
+		 "scroll-step": 5,
+		 "on-click": "pavucontrol",
+		 "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
 	 },
   	"network": {
 		"format-wifi": "",
 		"format-ethernet":"",
 		"format-disconnected": "",
-		"tooltip-format-disconnected": "Error",
-		"tooltip-format-wifi": "{essid} ({signalStrength}%) ",
-		"tooltip-format-ethernet": "{ifname} 🖧 ",
+		"tooltip-format-disconnected": "Disconnected",
+		"interval": 2,
+		"format-alt": "󰁅 {bandwidthDownBytes} 󰁝 {bandwidthUpBytes}",
+		"format-alt-click": "click-right",
+		"tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}\n󰁅 {bandwidthDownBytes}  󰁝 {bandwidthUpBytes}",
+		"tooltip-format-ethernet": "{ifname}\n{ipaddr}\n󰁅 {bandwidthDownBytes}  󰁝 {bandwidthUpBytes}",
 		"on-click": "kitty --title KittyNmtui sh -c '. ~/.config/nmtui-colors.sh; sleep 0.1; nmtui'"
     },
 	 "custom/sep": {
@@ -124,7 +237,7 @@
 	 "custom/notification": {
 		 "tooltip": true,
 		 "tooltip-format": "Left Click: Launch Notification Center\nRight Click: Do not Disturb",
-		 "format": "{} {icon} ",
+		 "format": "{} {icon}",
 		 "format-icons": {
 			 "notification": "<span foreground='red'><sup></sup></span>",
 			 "none": "",
@@ -146,7 +259,7 @@
 		 "format": "{}",
 		 "format-alt": "{alt}: {}",
 		 "format-alt-click": "click",
-		 "interval": 3600,
+		 "interval": 1800,
 		 "return-type": "json",
 		 "exec": "$HOME/.config/waybar/scripts/Weather.py",
 	    	 //"exec": "$HOME/.config/hypr/UserScripts/Weather.sh",
@@ -162,13 +275,13 @@
 		 "signal": 1
 	 },
 	 "custom/pacman": {
-		 "format": "󰅢  {}",
-		 "interval": 30,   
-		 "exec": "checkupdates | wc -l",
-		 "exec-if": "exit 0",
+		 "format": "󰅢 {}",
+		 "interval": 1800,
+		 "return-type": "json",
+		 "exec": "~/.config/waybar/scripts/updates.sh",
 		 "on-click": "kitty --title PacUpdate sh -c 'sleep 0.1; yay -Syu; echo Done - Press enter to exit; read'; pkill -SIGRTMIN+8 waybar",
 		 "signal": 8,
-		 "tooltip": false
+		 "tooltip": true
 	 },
 	 "battery": {
 		 "interval": 60,
@@ -181,11 +294,11 @@
 			 "warning": 30,
 			 "critical": 15
 		 },
-		 "format": "{icon}  {capacity}%",
+		 "format": "{icon} {capacity}%",
 		 "format-charging": " {capacity}%",
-		 "format-plugged": "  {capacity}%",
-		 "format-full": "{icon}  Full",
-		 "format-alt": "{icon}  {time}",
+		 "format-plugged": " {capacity}%",
+		 "format-full": "{icon} Full",
+		 "format-alt": "{icon} {time}",
 		 "format-icons": ["", "", "", "", ""],
 		 "format-time": "{H}h {M}min",
 		 "tooltip": true
