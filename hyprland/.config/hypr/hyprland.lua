@@ -196,8 +196,9 @@ hl.animation({ leaf = "fade",             enabled = true, speed = 1.8, bezier = 
 hl.animation({ leaf = "fadeDim",          enabled = true, speed = 5,   bezier = "default" })
 hl.animation({ leaf = "workspaces",       enabled = true, speed = 4.5, bezier = "mac_ease", style = "slide" })
 hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 2.3, bezier = "md3_decel", style = "slidefadevert 15%" })
-hl.animation({ leaf = "shadowangle",      enabled = true, speed = 100, bezier = "linear", style = "loop" })
-hl.animation({ leaf = "glowangle",        enabled = true, speed = 100, bezier = "linear", style = "loop" })
+-- Rotating shadow/glow gradients force a full repaint every frame (~20% Hyprland CPU idle)
+hl.animation({ leaf = "shadowangle",      enabled = false, speed = 100, bezier = "linear", style = "loop" })
+hl.animation({ leaf = "glowangle",        enabled = false, speed = 100, bezier = "linear", style = "loop" })
 
 hl.config({
     dwindle = {
