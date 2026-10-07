@@ -280,6 +280,7 @@ local floatMatches = {
     { name = "float-nwg-look",     class = "^(nwg-look)$" },
     { name = "float-ark",          class = "^(org\\.kde\\.ark)$" },
     { name = "float-pavucontrol",  class = "^(pavucontrol)$" },
+    { name = "float-qalculate",    class = "^(qalculate-gtk)$" },
     { name = "float-blueman",      class = "^(blueman-manager)$" },
     { name = "float-nm-applet",    class = "^(nm-applet)$" },
     { name = "float-nm-editor",    class = "^(nm-connection-editor)$" },

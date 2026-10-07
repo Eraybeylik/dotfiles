@@ -175,6 +175,7 @@
 			 "class<mpv>": " ",
 			 "class<vlc>": " 󰕼",
 			 "class<pavucontrol|org.pulseaudio.pavucontrol>": " 󰕾",
+			 "class<qalculate-gtk>": " 󰃬",
 			 "class<blueman-manager|.*blueman.*>": " ",
 			 "class<org.kde.kdeconnect.*>": " ",
 			 "class<nwg-look>": " ",

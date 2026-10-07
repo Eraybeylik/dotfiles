@@ -111,6 +111,7 @@ PACMAN_PKGS=(
   power-profiles-daemon
   python-pyquery
   python-requests
+  qalculate-gtk
   qemu-audio-spice
   qemu-base
   qemu-chardev-spice

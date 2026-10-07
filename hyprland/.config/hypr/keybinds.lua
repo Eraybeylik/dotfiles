@@ -80,6 +80,10 @@ hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/wallS
 -- Color Picker
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(programs.colorPicker .. " | wl-copy"))
 
+-- Calculator
+hl.bind(mainMod .. " + equal", hl.dsp.exec_cmd(programs.calculator))
+hl.bind("XF86Calculator",        hl.dsp.exec_cmd(programs.calculator))
+
 -- Screen locking
 hl.bind("SUPER + L", hl.dsp.exec_cmd("hyprlock"))
 

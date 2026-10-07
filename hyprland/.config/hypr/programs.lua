@@ -9,4 +9,5 @@ return {
     editor      = "opencode",
     editorAlt   = "subl",
     colorPicker = "hyprpicker",
+    calculator  = "qalculate-gtk",
 }
