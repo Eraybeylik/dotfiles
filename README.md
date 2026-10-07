@@ -191,7 +191,7 @@ Everything in `hyprland/.config/hypr/scripts/` and `rofi/.config/rofi/scripts/`,
 | `keybinds-cheatsheet.sh` | Parses `keybinds.lua` live and shows a searchable Rofi list |
 | `caffeine.sh` | Toggles `hypridle` on/off, reports status to Waybar |
 | `lid.sh` | Clamshell mode — disables the internal panel on lid close only if an external monitor is active |
-| `power-auto.sh` | Balanced by default, power-saver on battery at ≤30%, back to balanced when plugged in or above 35%; a manual pick sticks until the next transition |
+| `power-auto.sh` | Balanced by default, power-saver on battery at ≤30%, back to balanced when plugged in or above 35%; a manual pick sticks until the next transition. Critical "plug in" notification at ≤10% |
 | `ocr.sh` | Region select → Tesseract (tur+eng) → clipboard |
 | `wallSelect.sh` | Wallpaper picker with a resized-thumbnail cache, feeds Matugen |
 | `matugenMagick.sh` | Regenerates Rofi preview images and the GTK theme after a wallpaper change |
