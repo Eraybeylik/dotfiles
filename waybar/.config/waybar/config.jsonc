@@ -42,7 +42,7 @@
 	 "group/audio": {
 		 "orientation": "horizontal",
 		 "drawer": { "transition-duration": 300, "transition-left-to-right": false },
-		 "modules": ["pulseaudio", "pulseaudio#mic", "custom/brightness"]
+		 "modules": ["pulseaudio", "pulseaudio#mic", "custom/brightness", "custom/nightlight", "custom/ebook"]
 	 },
 	 "group/media": {
 		 "orientation": "horizontal",
@@ -97,6 +97,20 @@
 		 "signal": 10,
 		 "on-scroll-up": "~/.config/waybar/scripts/brightness.sh up",
 		 "on-scroll-down": "~/.config/waybar/scripts/brightness.sh down"
+	 },
+	 "custom/nightlight": {
+		 "exec": "~/.config/hypr/scripts/screen-filter.sh status warm",
+		 "return-type": "json",
+		 "interval": "once",
+		 "signal": 11,
+		 "on-click": "~/.config/hypr/scripts/screen-filter.sh warm"
+	 },
+	 "custom/ebook": {
+		 "exec": "~/.config/hypr/scripts/screen-filter.sh status grayscale",
+		 "return-type": "json",
+		 "interval": "once",
+		 "signal": 11,
+		 "on-click": "~/.config/hypr/scripts/screen-filter.sh grayscale"
 	 },
 	 "custom/media-prev": {
 		 "format": "󰒮",

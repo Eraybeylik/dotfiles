@@ -96,6 +96,10 @@ hl.bind("CTRL + ESCAPE", hl.dsp.exec_cmd("killall waybar || waybar"))
 -- Caffeine: keep screen awake (disables hypridle until toggled back)
 hl.bind(mainMod .. " + CTRL + I", hl.dsp.exec_cmd("~/.config/hypr/scripts/caffeine.sh toggle"))
 
+-- Screen filters: night light (warm) / e-book (grayscale)
+hl.bind(mainMod .. " + CTRL + N", hl.dsp.exec_cmd("~/.config/hypr/scripts/screen-filter.sh warm"))
+hl.bind(mainMod .. " + CTRL + G", hl.dsp.exec_cmd("~/.config/hypr/scripts/screen-filter.sh grayscale"))
+
 -- Screen zoom (accessibility / presentations)
 hl.bind(mainMod .. " + CTRL + Z", function()
     local zoom = hl.get_config("cursor.zoom_factor") or 1

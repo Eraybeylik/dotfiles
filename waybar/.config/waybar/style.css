@@ -252,6 +252,17 @@
   color: @tertiary;
 }
 
+#custom-nightlight,
+#custom-ebook {
+  color: @on_surface_variant;
+}
+
+#custom-nightlight.active,
+#custom-ebook.active {
+  color: @on_primary;
+  background-color: @primary;
+}
+
 tooltip {
   background-color: @surface;
   border: 2px solid @primary;

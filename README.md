@@ -150,6 +150,8 @@ sudo reboot
 | `CTRL + ESCAPE` | Toggle Waybar |
 | `SUPER + SHIFT + B` | Waybar theme selector |
 | `SUPER + CTRL + I` | Caffeine toggle (hold off idle/lock) |
+| `SUPER + CTRL + N` | Night light toggle (warm yellow screen filter) |
+| `SUPER + CTRL + G` | E-book mode toggle (grayscale screen filter) |
 | `SUPER + CTRL + Z` / `SUPER + CTRL + ALT + Z` | Screen zoom in / reset |
 | `Lid close` / `Lid open` | Clamshell mode when an external monitor is attached |
 
@@ -190,6 +192,7 @@ Everything in `hyprland/.config/hypr/scripts/` and `rofi/.config/rofi/scripts/`,
 | `sysmenu.sh` | Rofi system menu — Capture / Style / Toggle / System (incl. reboot to Windows / BIOS) / Keybinds / Webapps |
 | `keybinds-cheatsheet.sh` | Parses `keybinds.lua` live and shows a searchable Rofi list |
 | `caffeine.sh` | Toggles `hypridle` on/off, reports status to Waybar |
+| `screen-filter.sh` | Toggles full-screen shaders: `warm` (night light) / `grayscale` (e-book), reports status to Waybar |
 | `lid.sh` | Clamshell mode — disables the internal panel on lid close only if an external monitor is active |
 | `power-auto.sh` | Balanced by default, power-saver on battery at ≤30%, back to balanced when plugged in or above 35%; a manual pick sticks until the next transition. Critical "plug in" notification at ≤10% |
 | `ocr.sh` | Region select → Tesseract (tur+eng) → clipboard |
