@@ -180,6 +180,7 @@ AUR_PKGS=(
   grimblast-git
   obsidian
   pycharm
+  sddm-silent-theme
   sublime-text-4
   vesktop-bin
   visual-studio-code-bin
@@ -357,6 +358,9 @@ if [ -d "${DOTFILES_DIR}" ]; then
     warn "sudoers rule failed validation, skipping"
   fi
   rm -f "${sudoers_tmp}"
+
+  info "Configuring SilentSDDM login theme (matugen-synced)..."
+  sudo system/sddm/setup-sddm-theme.sh && success "SDDM theme configured" || warn "SDDM theme setup failed, keeping default greeter"
 else
   warn "Dotfiles directory not found, skipping stow"
 fi

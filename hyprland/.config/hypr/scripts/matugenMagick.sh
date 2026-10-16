@@ -39,5 +39,8 @@ magick $HOME/.config/rofi/images/currentWal.sqre \( -size 500x500 xc:white -fill
 # copy the wallpaper in current-wallpaper file
 ln -sf "$wallpaper_path" "$HOME/.local/share/bg"
 
+# sync colors + wallpaper to the SDDM login screen
+"$HOME/.config/hypr/scripts/sddm-sync.sh"
+
 # send notification after completion
 notify-send -e -h string:x-canonical-private-synchronous:matugen_notif "MatugenMagick" "Matugen & ImageMagick has completed its job" -i $HOME/.local/share/bg

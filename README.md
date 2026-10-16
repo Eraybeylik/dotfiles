@@ -20,7 +20,7 @@ Personal Wayland desktop setup — wallpaper-driven Material You theming across 
 
 ## ✨ Highlights
 
-- **Wallpaper → theme, everywhere.** Matugen extracts a Material You palette from the active wallpaper and regenerates GTK, Kitty, Rofi, Waybar, hyprlock, starship, and an Obsidian snippet in one pass.
+- **Wallpaper → theme, everywhere.** Matugen extracts a Material You palette from the active wallpaper and regenerates GTK, Kitty, Rofi, Waybar, hyprlock, the SDDM login screen, starship, and an Obsidian snippet in one pass.
 - **Hyprland in Lua.** `hyprland.lua` / `keybinds.lua` / `programs.lua` use Hyprland's native Lua config (0.55+) instead of raw `hyprland.conf` — real variables, loops, and shared program definitions.
 - **One-key system menu.** `SUPER + SPACE` opens a Rofi menu for capture, style, toggles and power — with a live, searchable keybind cheatsheet (`SUPER + K`) generated straight from `keybinds.lua`.
 - **Minimal Waybar.** Pill groups with hover drawers, app icons on occupied workspaces, now-playing for any MPRIS player (YouTube Music in Chrome included), repo + AUR update count, NVIDIA GPU stats that never wake a sleeping dGPU.
@@ -72,7 +72,7 @@ sudo reboot
 3. Bootstrap `uv` and `opencode` via their official installers
 4. Enable services (NetworkManager, Bluetooth, power-profiles-daemon, Docker, SDDM, PipeWire) and load `i2c-dev` for external-monitor brightness
 5. Apply GTK/GSettings/XDG fixes
-6. Clone (or update) this repo, symlink every package with `stow`, and install `reboot-to-windows` (root-owned copy + validated sudoers rule)
+6. Clone (or update) this repo, symlink every package with `stow`, and install `reboot-to-windows` (root-owned copy + validated sudoers rule), and wire the SilentSDDM login theme to Matugen
 7. Set Zsh as the default shell
 8. Run a final check for every tool it just installed
 
@@ -198,6 +198,7 @@ Everything in `hyprland/.config/hypr/scripts/` and `rofi/.config/rofi/scripts/`,
 | `ocr.sh` | Region select → Tesseract (tur+eng) → clipboard |
 | `wallSelect.sh` | Wallpaper picker with a resized-thumbnail cache, feeds Matugen |
 | `matugenMagick.sh` | Regenerates Rofi preview images and the GTK theme after a wallpaper change |
+| `sddm-sync.sh` | Copies the Matugen SDDM config + a 1080p wallpaper to `/var/lib/silent-matugen` for the login screen (called by `matugenMagick.sh`) |
 | `waybarSelect.sh` | Waybar theme switcher |
 | `webapp.sh` (rofi) | Opens a site from `rofi/webapps.list` as its own `chrome --app` window |
 
@@ -226,8 +227,10 @@ Everything in `hyprland/.config/hypr/scripts/` and `rofi/.config/rofi/scripts/`,
 Changing the wallpaper (via `waypaper`, the Rofi wallpaper picker, or `wallSelect.sh`) triggers Matugen, which reads `matugen/.config/matugen/config.toml` and regenerates every downstream template in one run:
 
 ```
-wallpaper ──▶ matugen ──▶ GTK 3/4 · Kitty · Rofi · Waybar · hyprlock · starship · Obsidian
+wallpaper ──▶ matugen ──▶ GTK 3/4 · Kitty · Rofi · Waybar · hyprlock · SDDM · starship · Obsidian
 ```
+
+**Login screen.** SDDM uses the [SilentSDDM](https://github.com/uiriansan/SilentSDDM) theme (AUR `sddm-silent-theme`). The greeter runs as the `sddm` user and can't read `$HOME`, so `sddm-sync.sh` copies the rendered config and wallpaper into the user-owned `/var/lib/silent-matugen`; `system/sddm/setup-sddm-theme.sh` (run once with sudo) creates that dir, installs `/etc/sddm.conf.d/10-silent-theme.conf`, and symlinks the theme's `configs/matugen.conf` and `backgrounds/matugen.jpg` to it. Only data lives there, never QML. Preview without logging out: `cd /usr/share/sddm/themes/silent && ./test.sh`.
 
 Colors land as Hyprland Lua variables too (`hyprland/.config/hypr/matugen/colors.lua`), so window borders, shadows, and glow follow the palette without a reload.
 
