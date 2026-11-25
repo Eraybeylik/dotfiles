@@ -18,6 +18,9 @@ hl.bind(mainMod .. " + SHIFT + C", hl.dsp.exec_cmd(programs.editorAlt))
 hl.bind(mainMod .. " + E",         hl.dsp.exec_cmd(programs.fileManager))
 hl.bind(mainMod .. " + R",         hl.dsp.exec_cmd(programs.menu))
 
+-- Window switcher (overview alternative)
+hl.bind(mainMod .. " + TAB",       hl.dsp.exec_cmd("~/.config/rofi/launchers/window-switcher.sh"))
+
 -- Rofi launcher style changer
 hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("~/.config/rofi/launchers/launcher-style-changer.sh"))
 

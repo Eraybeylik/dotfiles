@@ -54,7 +54,9 @@ end)
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
 
+hl.env("XCURSOR_THEME", "capitaine-cursors")
 hl.env("XCURSOR_SIZE", "28")
+hl.env("HYPRCURSOR_THEME", "capitaine-cursors")
 hl.env("HYPRCURSOR_SIZE", "28")
 
 -- Nvidia
@@ -106,8 +108,8 @@ local borderInactive = haveMat and rgba(mat.surface_container_high, "99") or "rg
 
 hl.config({
 	general = {
-		gaps_in = 6,
-		gaps_out = 12,
+		gaps_in = 10,
+		gaps_out = 22,
 		border_size = 2,
 
 		col = {
@@ -127,6 +129,10 @@ hl.config({
 		active_opacity = 1.0,
 		inactive_opacity = 1.0,
 
+		-- Subtle depth: unfocused windows dim slightly
+		dim_inactive = true,
+		dim_strength = 0.1,
+
 		shadow = {
 			enabled = true,
 			range = 20,
@@ -143,15 +149,16 @@ hl.config({
 			color_inactive = 0x2E1E1E2E, -- subtle dark
 		},
 
+		-- Off: multi-sample motion blur on every moving frame caused animation stutter
 		motion_blur = {
-			enabled = true,
+			enabled = false,
 			samples = 7,
 		},
 
 		blur = {
 			enabled = true,
 			size = 6,
-			passes = 3,
+			passes = 2,
 			new_optimizations = true,
 			xray = false,
 			noise = 0.02,
@@ -178,10 +185,11 @@ hl.curve("md3_accel", { type = "bezier", points = { { 0.20, 0 }, { 0.80, 0.08 } 
 hl.curve("mac_ease", { type = "bezier", points = { { 0.25, 1 }, { 0.5, 1 } } })
 hl.curve("linear", { type = "bezier", points = { { 0, 0 }, { 1, 1 } } })
 
-hl.animation({ leaf = "windows", enabled = true, speed = 5, bezier = "overshot", style = "slide" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 5, bezier = "snapback", style = "slide" })
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 5, bezier = "snapback", style = "slide" })
-hl.animation({ leaf = "windowsMove", enabled = true, speed = 5, bezier = "snapback", style = "slide" })
+-- Calmer window motion: soft pop-in/out instead of bouncy slides
+hl.animation({ leaf = "windows", enabled = true, speed = 4, bezier = "md3_decel", style = "popin 92%" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 3.5, bezier = "md3_accel", style = "popin 92%" })
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 4, bezier = "md3_decel", style = "popin 92%" })
+hl.animation({ leaf = "windowsMove", enabled = true, speed = 4, bezier = "md3_decel" })
 hl.animation({ leaf = "layers", enabled = true, speed = 5, bezier = "overshot", style = "slide" })
 hl.animation({ leaf = "layersIn", enabled = true, speed = 1.8, bezier = "menu_decel", style = "slide" })
 hl.animation({ leaf = "layersOut", enabled = true, speed = 1.5, bezier = "menu_accel" })
@@ -201,6 +209,18 @@ hl.animation({
 -- Rotating shadow/glow gradients force a full repaint every frame (~20% Hyprland CPU idle)
 hl.animation({ leaf = "shadowangle", enabled = false, speed = 100, bezier = "linear", style = "loop" })
 hl.animation({ leaf = "glowangle", enabled = false, speed = 100, bezier = "linear", style = "loop" })
+
+-- Glass layers: blur behind bar, launcher, notifications, logout.
+-- ignore_alpha keeps fully transparent pixels from being blurred.
+hl.layer_rule({
+	name = "glass-layers",
+	match = { namespace = "^(waybar|rofi|swaync-control-center|swaync-notification-window|wlogout|logout_dialog)$" },
+	blur = true,
+	ignore_alpha = 0.3,
+})
+
+-- Smart gaps: a lone tiled window gets tight gaps (floating-glass look stays on multi-window workspaces)
+hl.workspace_rule({ workspace = "w[tv1]", gaps_in = 0, gaps_out = 6 })
 
 hl.config({
 	dwindle = {
@@ -303,8 +323,8 @@ local opacityRules = {
 	{ name = "opacity-arduino", class = "^(Arduino IDE)$", opacity = "0.80 0.80" },
 	{ name = "opacity-warp", class = "^(dev\\.warp\\.Warp)$", opacity = "0.80 0.80" },
 	{ name = "opacity-obsidian", class = "^(obsidian)$", opacity = "0.80 0.80" },
-	{ name = "opacity-kitty", class = "^(kitty)$", opacity = "0.80 0.80" },
-	{ name = "opacity-nautilus", class = "^(org\\.gnome\\.Nautilus)$", opacity = "0.80 0.80" },
+	{ name = "opacity-kitty", class = "^(kitty)$", opacity = "0.68 0.68" },
+	{ name = "opacity-thunar", class = "^([Tt]hunar)$", opacity = "0.85 0.85" },
 	{ name = "opacity-ark", class = "^(org\\.kde\\.ark)$", opacity = "0.80 0.80" },
 }
 
