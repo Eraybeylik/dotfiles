@@ -43,6 +43,7 @@ PACMAN_PKGS=(
   bluez
   bluez-utils
   bridge-utils
+  capitaine-cursors
   brightnessctl
   btop
   burpsuite
@@ -102,6 +103,7 @@ PACMAN_PKGS=(
   os-prober
   otf-geist-mono-nerd
   pacman-contrib
+  papirus-icon-theme
   pamixer
   pavucontrol
   pciutils

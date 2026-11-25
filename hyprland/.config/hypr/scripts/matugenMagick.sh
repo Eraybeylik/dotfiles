@@ -17,6 +17,9 @@ else
   matugen image "$wallpaper_path" -m "dark" --source-color-index 0
 fi 
 
+# adapt kitty opacity to the new wallpaper (needs the fresh colors.conf)
+"$HOME/.config/hypr/scripts/kitty-opacity.sh"
+
 # set gtk theme
 gsettings set org.gnome.desktop.interface gtk-theme ""
 gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3

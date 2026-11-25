@@ -35,10 +35,10 @@ window {
     enabled:                     true;
     margin:                      0px;
     padding:                     0px;
-    border:                      0px solid;
-    border-radius:               12px;
-    border-color:                @selected;
-    background-color:            @background;
+    border:                      1px solid;
+    border-radius:               0px;
+    border-color:                @outline-variant;
+    background-color:            @background-alpha;
     cursor:                      "default";
 }
 
@@ -62,9 +62,9 @@ inputbar {
     margin:                      0px;
     padding:                     15px;
     border:                      0px solid;
-    border-radius:               12px;
+    border-radius:               0px;
     border-color:                @selected;
-    background-color:            @background-alt;
+    background-color:            @selected-alpha;
     text-color:                  @foreground;
     children:                    [ "prompt", "entry" ];
 }
@@ -72,7 +72,7 @@ inputbar {
 prompt {
     enabled:                     true;
     background-color:            inherit;
-    text-color:                  inherit;
+    text-color:                  @primary;
 }
 textbox-prompt-colon {
     enabled:                     true;
@@ -127,19 +127,19 @@ element {
     margin:                      0px;
     padding:                     10px;
     border:                      0px solid;
-    border-radius:               12px;
+    border-radius:               0px;
     border-color:                @selected;
     background-color:            transparent;
     text-color:                  @foreground;
     cursor:                      pointer;
 }
 element normal.normal {
-    background-color:            @background;
+    background-color:            transparent;
     text-color:                  @foreground;
 }
 element selected.normal {
-    background-color:            @selected-alpha;
-    text-color:                  @foreground;
+    background-color:            @primary;
+    text-color:                  @on-primary;
 }
 element-icon {
     background-color:            transparent;
