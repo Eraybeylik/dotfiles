@@ -1,274 +1,114 @@
-
-
-/***
- *    ┓ ┏┏┓┓┏┳┓┏┓┳┓  ┳┓┓ ┳┳┏┓┓┏  ┏┓┏┓┏┓
- *    ┃┃┃┣┫┗┫┣┫┣┫┣┫━━┣┫┃ ┃┃┗┓┣┫━━┃ ┗┓┗┓
- *    ┗┻┛┛┗┗┛┻┛┛┗┛┗  ┻┛┗┛┗┛┗┛┛┗  ┗┛┗┛┗┛
- *                                     
- */
-
-
-
-/*--------------Import Matugen Colors--------------*/
+/* tty: airy, flat, sharp. Matugen colors; glass via hyprland layer blur. */
 @import "matugen/matugen-waybar.css";
 
 * {
   min-height: 0;
   min-width: 0;
-  font-family: "GeistMono Nerd Font Propo";
-  font-size: 12px;
-  font-weight: 600;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  font-family: "GeistMono Nerd Font";
+  font-size: 13px;
+  font-weight: 500;
 }
- window#waybar {
-  transition-property: background-color;
-  transition-duration: 0.5s;
+
+window#waybar {
   background-color: @surface-alpha;
-}
-
-
-#workspaces button {
-  padding: 2px 9px;
-  margin: 5px 3px;
-  border-radius: 6px;
-  background-color: @surface;
+  border-bottom: 1px solid @outline_variant;
   color: @on_surface;
-}
-
-#workspaces button:hover {
-  color: @scrim;
-  background-color: @tertiary;
-}
-
-#workspaces button.active {
-  background-color: @primary;
-  color: @on_primary;
-}
-
-#workspaces button.urgent {
-  background-color: @surface;
-  color: @error;
-}
-
-
-
-
-#clock,
-#custom-logo,
-#custom-launcher,
-#custom-spotify,
-#custom-notification,
-#battery,
-#tray,
-#custom-media,
-#utils,
-#hardware,
-#connect,
-#audio,
-#power {
-  padding: 2px 9px;
-  margin: 5px 3px;
-  border-radius: 6px;
-  background-color: @surface;
-}
-
-/*--------------Groups: one pill, children flat--------------*/
-#utils,
-#hardware,
-#connect,
-#audio,
-#power {
-  padding: 0px 3px;
-}
-
-#utils > widget > *,
-#hardware > widget > *,
-#connect > widget > *,
-#audio > widget > *,
-#power > widget > *,
-#hardware revealer widget > *,
-#audio revealer widget > * {
-  padding: 2px 6px;
-  margin: 0px;
-  border-radius: 6px;
-  background-color: transparent;
-}
-
-/* Media text: no letter-spacing, it doubled the pill width */
-#custom-media {
-  letter-spacing: 0px;
-}
-
-#custom-media.playing {
-  color: @primary;
-}
-
-#custom-media.paused {
-  color: @outline;
-}
-
-/*--------------Media drawer buttons--------------*/
-#custom-media-prev,
-#custom-media-toggle,
-#custom-media-next {
-  padding: 2px 8px;
-  margin: 5px 1px;
-  border-radius: 6px;
-  background-color: @surface;
-  color: @primary;
-}
-
-#custom-media-prev:hover,
-#custom-media-toggle:hover,
-#custom-media-next:hover {
-  background-color: @primary;
-  color: @on_primary;
-}
-
-#custom-sep {
-  padding: 0px;
-  color: @primary;
-}
-
-#battery {
-    color: @on_surface;
-}
-
-#battery.charging,
-#battery.plugged,
-#battery.full {
-    color: @primary;
-}
-
-#battery.warning:not(.charging) {
-    color: @tertiary;
-}
-
-#battery.critical:not(.charging) {
-    color: @on_error;
-    background-color: @error;
-}
-
-
-
-#cpu {
-  color: @primary;
-}
-
-#memory {
-  color: @tertiary;
-}
-
-#clock {
-  color: @secondary;
-}
-
-#clock.simpleclock {
-  color: @secondary;
-}
-
-#window {
-  color: @on_surface;
-}
-
-#pulseaudio {
-  color: @primary;
-}
-
-#pulseaudio.muted {
-  color: @error;
-}
-
-
-
-#custom-launcher {
-  padding: 0px 12px;
-  margin-left: 6px;
-  color: @error;
-}
-
-#tray {
-  margin-right: 6px;
-}
-
-#custom-caffeine,
-#power-profiles-daemon {
-  color: @on_surface_variant;
-}
-
-#custom-caffeine.active,
-#power-profiles-daemon.performance {
-  color: @on_primary;
-  background-color: @primary;
-}
-
-#power-profiles-daemon.power-saver {
-  color: @tertiary;
-}
-
-#custom-pacman {
-  color: @primary;
-}
-
-#custom-weather,
-#custom-colorpicker {
-  color: @on_surface;
-}
-
-#temperature,
-#custom-gpu {
-  color: @secondary;
-}
-
-#temperature.critical,
-#custom-gpu.hot {
-  color: @error;
-}
-
-#custom-gpu.off {
-  color: @outline;
-}
-
-#network,
-#bluetooth.connected {
-  color: @primary;
-}
-
-#bluetooth,
-#bluetooth.off,
-#bluetooth.disabled {
-  color: @outline;
-}
-
-#network.disconnected,
-#pulseaudio.mic.source-muted {
-  color: @error;
-}
-
-#pulseaudio.mic {
-  color: @on_surface_variant;
-}
-
-#custom-brightness {
-  color: @tertiary;
-}
-
-#custom-nightlight,
-#custom-ebook {
-  color: @on_surface_variant;
-}
-
-#custom-nightlight.active,
-#custom-ebook.active {
-  color: @on_primary;
-  background-color: @primary;
 }
 
 tooltip {
   background-color: @surface;
-  border: 2px solid @primary;
+  border: 1px solid @outline_variant;
 }
 
-label {
-  letter-spacing: 2px;
+/* ---- left: workspaces (active = accent underline) + window title ---- */
+#workspaces { margin-left: 6px; }
+
+#workspaces button {
+  padding: 0 11px;
+  margin: 0;
+  color: @outline;
+  background-color: transparent;
+  border-bottom: 2px solid transparent;
 }
 
+#workspaces button:hover {
+  color: @on_surface;
+  background-color: alpha(@on_surface, 0.06);
+}
+
+#workspaces button.active {
+  color: @primary;
+  border-bottom: 2px solid @primary;
+}
+
+#workspaces button.urgent {
+  color: @error;
+  border-bottom: 2px solid @error;
+}
+
+#window {
+  margin-left: 18px;
+  color: @on_surface_variant;
+}
+
+/* ---- center ---- */
+#clock {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ---- right: every module gets room to breathe ---- */
+#custom-media,
+#cpu,
+#memory,
+#network,
+#pulseaudio,
+#battery,
+#custom-nightlight,
+#custom-ebook,
+#custom-caffeine,
+#power-profiles-daemon,
+#custom-notification,
+#tray {
+  padding: 0 12px;
+  margin: 0;
+  background-color: transparent;
+  color: @on_surface;
+}
+
+#custom-media.playing { color: @primary; }
+#custom-media.paused { color: @outline; }
+
+/* VPN accent while connected (module hidden otherwise) */
+#network.vpn-tun,
+#network.vpn-wg { color: @tertiary; }
+#network.disconnected { color: @error; }
+
+#battery.charging,
+#battery.plugged { color: @primary; }
+#battery.warning:not(.charging) { color: @tertiary; }
+#battery.critical:not(.charging) { color: @error; }
+
+/* thin divider before the toggle cluster */
+#custom-nightlight {
+  margin-left: 6px;
+  border-left: 1px solid @outline_variant;
+  padding-left: 16px;
+}
+
+#custom-nightlight.inactive,
+#custom-ebook.inactive,
+#custom-caffeine.inactive { color: @outline; }
+
+#custom-nightlight.active,
+#custom-ebook.active,
+#custom-caffeine.active { color: @primary; }
+
+#power-profiles-daemon { color: @on_surface_variant; }
+#custom-notification { color: @on_surface_variant; }
+#custom-notification.notification { color: @primary; }
+
+#tray { padding-right: 10px; }

@@ -1,0 +1,114 @@
+/* tty: airy, flat, sharp. Matugen colors; glass via hyprland layer blur. */
+@import "matugen/matugen-waybar.css";
+
+* {
+  min-height: 0;
+  min-width: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  font-family: "GeistMono Nerd Font";
+  font-size: 13px;
+  font-weight: 500;
+}
+
+window#waybar {
+  background-color: @surface-alpha;
+  border-bottom: 1px solid @outline_variant;
+  color: @on_surface;
+}
+
+tooltip {
+  background-color: @surface;
+  border: 1px solid @outline_variant;
+}
+
+/* ---- left: workspaces (active = accent underline) + window title ---- */
+#workspaces { margin-left: 6px; }
+
+#workspaces button {
+  padding: 0 11px;
+  margin: 0;
+  color: @outline;
+  background-color: transparent;
+  border-bottom: 2px solid transparent;
+}
+
+#workspaces button:hover {
+  color: @on_surface;
+  background-color: alpha(@on_surface, 0.06);
+}
+
+#workspaces button.active {
+  color: @primary;
+  border-bottom: 2px solid @primary;
+}
+
+#workspaces button.urgent {
+  color: @error;
+  border-bottom: 2px solid @error;
+}
+
+#window {
+  margin-left: 18px;
+  color: @on_surface_variant;
+}
+
+/* ---- center ---- */
+#clock {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ---- right: every module gets room to breathe ---- */
+#custom-media,
+#cpu,
+#memory,
+#network,
+#pulseaudio,
+#battery,
+#custom-nightlight,
+#custom-ebook,
+#custom-caffeine,
+#power-profiles-daemon,
+#custom-notification,
+#tray {
+  padding: 0 12px;
+  margin: 0;
+  background-color: transparent;
+  color: @on_surface;
+}
+
+#custom-media.playing { color: @primary; }
+#custom-media.paused { color: @outline; }
+
+/* VPN accent while connected (module hidden otherwise) */
+#network.vpn-tun,
+#network.vpn-wg { color: @tertiary; }
+#network.disconnected { color: @error; }
+
+#battery.charging,
+#battery.plugged { color: @primary; }
+#battery.warning:not(.charging) { color: @tertiary; }
+#battery.critical:not(.charging) { color: @error; }
+
+/* thin divider before the toggle cluster */
+#custom-nightlight {
+  margin-left: 6px;
+  border-left: 1px solid @outline_variant;
+  padding-left: 16px;
+}
+
+#custom-nightlight.inactive,
+#custom-ebook.inactive,
+#custom-caffeine.inactive { color: @outline; }
+
+#custom-nightlight.active,
+#custom-ebook.active,
+#custom-caffeine.active { color: @primary; }
+
+#power-profiles-daemon { color: @on_surface_variant; }
+#custom-notification { color: @on_surface_variant; }
+#custom-notification.notification { color: @primary; }
+
+#tray { padding-right: 10px; }

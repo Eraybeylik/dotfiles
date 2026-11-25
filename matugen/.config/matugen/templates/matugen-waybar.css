@@ -7,7 +7,7 @@
 
 
 /*-----Surface Transparent Background------*/
-@define-color surface-alpha {{colors.surface.default.rgba | set_alpha: 0.5}};
+@define-color surface-alpha {{colors.primary_container.default.rgba | set_lightness: 18.0 | set_alpha: 0.6}};
 
 /*-----All Colors--------*/
 <* for name, value in colors *>

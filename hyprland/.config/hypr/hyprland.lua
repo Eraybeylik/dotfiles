@@ -55,9 +55,9 @@ end)
 -------------------------------
 
 hl.env("XCURSOR_THEME", "capitaine-cursors")
-hl.env("XCURSOR_SIZE", "28")
+hl.env("XCURSOR_SIZE", "32")
 hl.env("HYPRCURSOR_THEME", "capitaine-cursors")
-hl.env("HYPRCURSOR_SIZE", "28")
+hl.env("HYPRCURSOR_SIZE", "32")
 
 -- Nvidia
 hl.env("LIBVA_DRIVER_NAME", "nvidia")
@@ -110,7 +110,7 @@ hl.config({
 	general = {
 		gaps_in = 10,
 		gaps_out = 22,
-		border_size = 2,
+		border_size = 1,
 
 		col = {
 			active_border = { colors = borderColors, angle = 45 },
@@ -123,8 +123,8 @@ hl.config({
 	},
 
 	decoration = {
-		rounding = 12,
-		rounding_power = 3, -- squircle corners
+		rounding = 0, -- sharp rectangular windows (was 12 + squircle power 3)
+		rounding_power = 3,
 
 		active_opacity = 1.0,
 		inactive_opacity = 1.0,
@@ -157,14 +157,14 @@ hl.config({
 
 		blur = {
 			enabled = true,
-			size = 6,
+			size = 4,
 			passes = 2,
 			new_optimizations = true,
 			xray = false,
-			noise = 0.02,
-			contrast = 1.1,
-			brightness = 1.0,
-			vibrancy = 0.2,
+			noise = 0.01,
+			contrast = 1.0, -- >1 washed light wallpapers out to white behind transparent windows
+			brightness = 0.85,
+			vibrancy = 0.0,
 			vibrancy_darkness = 0.0,
 		},
 	},
@@ -186,10 +186,10 @@ hl.curve("mac_ease", { type = "bezier", points = { { 0.25, 1 }, { 0.5, 1 } } })
 hl.curve("linear", { type = "bezier", points = { { 0, 0 }, { 1, 1 } } })
 
 -- Calmer window motion: soft pop-in/out instead of bouncy slides
-hl.animation({ leaf = "windows", enabled = true, speed = 4, bezier = "md3_decel", style = "popin 92%" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 3.5, bezier = "md3_accel", style = "popin 92%" })
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 4, bezier = "md3_decel", style = "popin 92%" })
-hl.animation({ leaf = "windowsMove", enabled = true, speed = 4, bezier = "md3_decel" })
+hl.animation({ leaf = "windows", enabled = true, speed = 5, bezier = "md3_decel", style = "popin 94%" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 4, bezier = "md3_accel", style = "popin 94%" })
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 5, bezier = "md3_decel", style = "popin 94%" })
+hl.animation({ leaf = "windowsMove", enabled = true, speed = 5, bezier = "md3_decel" })
 hl.animation({ leaf = "layers", enabled = true, speed = 5, bezier = "overshot", style = "slide" })
 hl.animation({ leaf = "layersIn", enabled = true, speed = 1.8, bezier = "menu_decel", style = "slide" })
 hl.animation({ leaf = "layersOut", enabled = true, speed = 1.5, bezier = "menu_accel" })
@@ -198,7 +198,7 @@ hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 1.8, bezier = "me
 hl.animation({ leaf = "border", enabled = true, speed = 5, bezier = "default" })
 hl.animation({ leaf = "fade", enabled = true, speed = 1.8, bezier = "md3_decel" })
 hl.animation({ leaf = "fadeDim", enabled = true, speed = 5, bezier = "default" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 4.5, bezier = "mac_ease", style = "slide" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 4, bezier = "md3_decel", style = "fade" })
 hl.animation({
 	leaf = "specialWorkspace",
 	enabled = true,
@@ -316,6 +316,13 @@ for _, m in ipairs(floatMatches) do
 	})
 end
 
+-- Terminal: no blur at all, so the wallpaper shows through crisp (opacity comes from kitty.conf)
+hl.window_rule({
+	name = "noblur-kitty",
+	match = { class = "^(kitty)$" },
+	no_blur = true,
+})
+
 -- Opacity rules
 local opacityRules = {
 	{ name = "opacity-thorium", class = "^(Thorium-browser)$", opacity = "0.90 0.90" },
@@ -323,7 +330,6 @@ local opacityRules = {
 	{ name = "opacity-arduino", class = "^(Arduino IDE)$", opacity = "0.80 0.80" },
 	{ name = "opacity-warp", class = "^(dev\\.warp\\.Warp)$", opacity = "0.80 0.80" },
 	{ name = "opacity-obsidian", class = "^(obsidian)$", opacity = "0.80 0.80" },
-	{ name = "opacity-kitty", class = "^(kitty)$", opacity = "0.68 0.68" },
 	{ name = "opacity-thunar", class = "^([Tt]hunar)$", opacity = "0.85 0.85" },
 	{ name = "opacity-ark", class = "^(org\\.kde\\.ark)$", opacity = "0.80 0.80" },
 }
