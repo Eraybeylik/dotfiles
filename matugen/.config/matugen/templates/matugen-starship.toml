@@ -44,10 +44,6 @@ format = "[$user]($style) "
 disabled = false
 show_always = true
 
-# ===== HOSTNAME (Disabled) =====
-[hostname]
-disabled = true
-
 # ===== DIRECTORY =====
 [directory]
 read_only = " 󰌾"
@@ -79,10 +75,6 @@ staged = "+${count} "
 renamed = "»${count} "
 deleted = "✘${count} "
 
-[git_commit]
-tag_symbol = " "
-commit_hash_length = 7
-
 # ===== PROGRAMMING LANGUAGES =====
 [python]
 symbol = " "
@@ -109,17 +101,7 @@ symbol = " "
 style = "bold red"
 format = "via [$symbol$version]($style) "
 
-[kotlin]
-symbol = " "
-style = "bold blue"
-format = "via [$symbol$version]($style) "
-
 [php]
-symbol = " "
-style = "bold blue"
-format = "via [$symbol$version]($style) "
-
-[lua]
 symbol = " "
 style = "bold blue"
 format = "via [$symbol$version]($style) "
@@ -130,127 +112,6 @@ symbol = " "
 style = "bold blue"
 format = "via [$symbol$context]($style) "
 only_with_files = true
-
-# ===== AWS =====
-[aws]
-symbol = "  "
-style = "bold yellow"
-format = "on [$symbol$profile]($style) "
-
-# ===== PACKAGE =====
-[package]
-symbol = "󰏗 "
-style = "bold cyan"
-format = "is [$symbol$version]($style) "
-
-# ===== OTHER LANGUAGES =====
-[c]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[cmake]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[conda]
-symbol = " "
-format = "via [$symbol$environment]($style) "
-
-[crystal]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[dart]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[elixir]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[elm]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[fennel]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[fossil_branch]
-symbol = " "
-format = "on [$symbol$branch]($style) "
-
-[gradle]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[guix_shell]
-symbol = " "
-format = "via [$symbol]($style) "
-
-[haskell]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[haxe]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[hg_branch]
-symbol = " "
-format = "on [$symbol$branch]($style) "
-
-[julia]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[meson]
-symbol = "󰔷 "
-format = "via [$symbol$project]($style) "
-
-[nim]
-symbol = "󰆥 "
-format = "via [$symbol$version]($style) "
-
-[nix_shell]
-symbol = " "
-format = "via [$symbol$state]($style) "
-
-[ocaml]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[perl]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[pijul_channel]
-symbol = " "
-format = "on [$symbol$channel]($style) "
-
-[rlang]
-symbol = "󰟔 "
-format = "via [$symbol$version]($style) "
-
-[ruby]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[scala]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[swift]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[zig]
-symbol = " "
-format = "via [$symbol$version]($style) "
-
-[buf]
-symbol = " "
-format = "via [$symbol$version]($style) "
 
 # ===== LINE BREAK =====
 [line_break]

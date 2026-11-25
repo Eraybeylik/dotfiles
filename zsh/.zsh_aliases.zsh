@@ -1,8 +1,8 @@
 # Eza (modern ls)
 if command -v eza &> /dev/null; then
-    alias ll='eza -lha --icons=always --color=always'
-    alias ls='eza --icons=always --color=always'
-    alias lt='eza --tree --level=2 --icons'
+    alias ll='eza -lha --icons=auto --color=auto --git'
+    alias ls='eza --icons=auto --color=auto'
+    alias lt='eza --tree --level=2 --icons=auto'
 else
     alias ls='ls --color'
     alias ll='ls -lh --color'
@@ -33,7 +33,7 @@ fi
 
 # Zoxide (smart cd)
 if command -v zoxide &> /dev/null; then
-    eval "$(zoxide init --cmd cd zsh)"
+    _cache_eval zoxide init --cmd cd zsh
 fi
 
 # Lazygit
@@ -44,6 +44,19 @@ fi
 # Lazydocker
 if command -v lazydocker &> /dev/null; then
     alias lzd="lazydocker"
+fi
+
+# Yazi (file manager): `y` cd's into the last dir on quit
+if command -v yazi &> /dev/null; then
+    y() {
+        local tmp cwd
+        tmp="$(mktemp -t yazi-cwd.XXXXXX)"
+        yazi "$@" --cwd-file="$tmp"
+        if cwd="$(<"$tmp")" && [[ -n $cwd && $cwd != $PWD ]]; then
+            builtin cd -- "$cwd"
+        fi
+        rm -f -- "$tmp"
+    }
 fi
 
 # Docker

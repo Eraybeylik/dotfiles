@@ -1,3 +1,17 @@
+# Dedupe PATH entries
+typeset -U path PATH
+
+# Cache `<tool> init zsh` output; regenerated when the binary is newer.
+# Usage: _cache_eval <tool> <args...>
+_cache_eval() {
+    local bin=$1 f="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/${(j:-:)@}.zsh"
+    (( $+commands[$bin] )) || return
+    if [[ ! -s $f || $commands[$bin] -nt $f ]]; then
+        mkdir -p "${f:h}" && "$@" >| "$f"
+    fi
+    source "$f"
+}
+
 # Zinit plugin manager
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
@@ -13,9 +27,19 @@ zinit light jeffreytse/zsh-vi-mode
 
 # zvm is fully initialized here (sourcing mode), so bindings below win.
 # fzf: Ctrl+R fuzzy history, Ctrl+T files, Alt+C cd
-if command -v fzf &> /dev/null; then
-    source <(fzf --zsh)
-fi
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --level=2 --color=always {}'"
+_cache_eval fzf --zsh
+
+# atuin: Ctrl+R history search (up-arrow stays default). Sourced after fzf so it wins.
+_cache_eval atuin init zsh --disable-up-arrow
+
+# direnv: per-directory env (.envrc)
+export DIRENV_LOG_FORMAT=""
+_cache_eval direnv hook zsh
 
 bindkey '^[[3~' delete-char                       # delete
 bindkey '^[[1;5C' forward-word                    # ctrl + ->
@@ -50,18 +74,26 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -1 --color=always $real
 # PATH
 export PATH=$PATH:$HOME/.local/bin/
 export PATH=$PATH:/var/lib/snapd/snap/bin
-export PATH=/home/xera/.opencode/bin:$PATH
+export PATH="$HOME/.opencode/bin:$PATH"
 export PATH="$HOME/.local/share/npm-global/bin:$PATH"
 export PATH="$PATH:$HOME/go/bin"
 export XDG_DATA_DIRS="/var/lib/snapd/desktop:$XDG_DATA_DIRS"
 
 # History
 HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=50000
+SAVEHIST=50000
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_SPACE        # leading space = keep out of history
+setopt HIST_REDUCE_BLANKS
+setopt EXTENDED_HISTORY         # timestamps
 setopt SHARE_HISTORY
+
+# Navigation / misc
+setopt AUTO_CD                  # type a dir name to cd into it
+setopt AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_SILENT   # `cd -N` stack
+setopt INTERACTIVE_COMMENTS
 
 # Aliases import
 if [ -f ~/.zsh_aliases.zsh ]; then
@@ -69,7 +101,7 @@ if [ -f ~/.zsh_aliases.zsh ]; then
 fi
 
 # Starship prompt
-eval "$(starship init zsh)"
+_cache_eval starship init zsh
 
 # uv / local env
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
@@ -84,7 +116,7 @@ alias clear='clear && printf "\e[3J"'
 export CLAUDE_OBSIDIAN_VAULT="$HOME/Documents/obsidian-vaults/claude-vault"
 
 # Added by LM Studio CLI (lms)
-export PATH="$PATH:/home/xera/.lmstudio/bin"
+export PATH="$PATH:$HOME/.lmstudio/bin"
 # End of LM Studio CLI section
 
 # nmtui / whiptail (newt) color scheme

@@ -33,6 +33,7 @@ ZPROFILE="${HOME}/.zprofile"
 PACMAN_PKGS=(
   amd-ucode
   adw-gtk-theme
+  atuin
   awww
   base
   base-devel
@@ -48,6 +49,7 @@ PACMAN_PKGS=(
   cliphist
   curl
   ddcutil
+  direnv
   dnsmasq
   docker
   docker-buildx
@@ -61,6 +63,7 @@ PACMAN_PKGS=(
   flameshot
   fuse3
   fzf
+  git-delta
   git
   grub
   gst-plugin-pipewire
@@ -159,6 +162,7 @@ PACMAN_PKGS=(
   xdg-utils
   xxhash
   zoxide
+  yazi
   zram-generator
   zsh
 
@@ -385,7 +389,7 @@ fi
 # ------------------------------------------------------------
 step "15. Final checks"
 # ------------------------------------------------------------
-for cmd in waybar rofi swaync pavucontrol blueman-manager nmtui brightnessctl playerctl docker virt-manager Hyprland matugen fastfetch waypaper tmux fzf eza flameshot swappy subl opencode uv lazygit lazydocker checkupdates; do
+for cmd in waybar rofi swaync pavucontrol blueman-manager nmtui brightnessctl playerctl docker virt-manager Hyprland matugen fastfetch waypaper tmux fzf eza atuin direnv yazi delta flameshot swappy subl opencode uv lazygit lazydocker checkupdates; do
   if command -v "${cmd}" >/dev/null 2>&1; then
     success "${cmd} found"
   else
