@@ -20,21 +20,22 @@ Personal Wayland desktop setup — wallpaper-driven Material You theming across 
 
 ## ✨ Highlights
 
-- **Wallpaper → theme, everywhere.** Matugen extracts a Material You palette from the active wallpaper and regenerates GTK, Kitty, Rofi, Waybar, hyprlock, the SDDM login screen, starship, and an Obsidian snippet in one pass.
+- **Wallpaper → theme, everywhere.** Matugen extracts a Material You palette from the active wallpaper and regenerates GTK, Kitty, Rofi, Waybar, swaync, wlogout, hyprlock, the SDDM login screen, starship, and an Obsidian snippet in one pass.
 - **Hyprland in Lua.** `hyprland.lua` / `keybinds.lua` / `programs.lua` use Hyprland's native Lua config (0.55+) instead of raw `hyprland.conf` — real variables, loops, and shared program definitions.
 - **One-key system menu.** `SUPER + SPACE` opens a Rofi menu for capture, style, toggles and power — with a live, searchable keybind cheatsheet (`SUPER + K`) generated straight from `keybinds.lua`.
-- **Minimal Waybar.** Pill groups with hover drawers, app icons on occupied workspaces, now-playing for any MPRIS player (YouTube Music in Chrome included), repo + AUR update count, NVIDIA GPU stats that never wake a sleeping dGPU.
-- **Laptop-aware.** Clamshell mode when docked, a caffeine toggle to hold off idle/lock, a staged `hypridle` (lock → screen off), automatic power profile (balanced, power-saver on battery ≤30%), and brightness synced to external monitors over DDC/CI.
+- **Sharp glass desktop.** Square 1px-bordered windows, blurred translucent bar/launcher/notifications, and a terminal whose opacity adapts to the wallpaper (`kitty-opacity.sh` keeps text at WCAG 4.5:1). Bar, Kitty, Rofi, swaync, wlogout and hyprlock glass are tinted from the wallpaper's primary colour, so every wallpaper change visibly recolours them.
+- **Two Waybar themes.** `tty` (default) is an airy three-zone bar — workspaces + window title, centered clock, icon status on the right (VPN shows only while a tunnel is up). `pills` is the older grouped-pill bar with hover drawers, app icons, now-playing and update counts. Switch with `waybarSelect.sh`.
+- **Laptop-aware.** Clamshell mode when docked, a caffeine toggle to hold off idle/lock, a staged `hypridle` (lock → screen off → suspend, on battery only), automatic power profile (balanced, power-saver on battery ≤30%), and brightness synced to external monitors over DDC/CI.
 - **Reproducible.** `install.sh` takes a bare Arch install to a fully themed Hyprland desktop: packages, AUR, services, dotfiles, shell — no manual steps beyond partitioning/base install.
-- **Fast shell.** Zsh + Zinit in turbo mode, `zsh-vi-mode`, fzf-tab completion, autosuggestions, syntax highlighting.
+- **Fast shell.** Zsh + Zinit in turbo mode, cached tool init, `zsh-vi-mode`, fzf-tab completion, autosuggestions, syntax highlighting, Atuin history (Ctrl+R), direnv, Yazi (`y`), delta for git.
 
 ## 📦 Components
 
 | Config | Description |
 |---|---|
 | `hyprland` | Compositor, keybinds, hypridle, hyprlock (Lua config) |
-| `waybar` | Status bar — grouped pills, hover drawers, workspace app icons |
-| `kitty` | Terminal emulator |
+| `waybar` | Status bar — `tty` (default) and `pills` themes |
+| `kitty` | Terminal emulator (wallpaper-adaptive opacity) |
 | `rofi` | Application launcher |
 | `swaync` | Notification center |
 | `wlogout` | Logout menu |
@@ -90,6 +91,7 @@ sudo reboot
 | `SUPER + SHIFT + C` | Editor (Sublime Text) |
 | `SUPER + E` | File Manager (Thunar) |
 | `SUPER + R` | Launcher (Rofi) |
+| `SUPER + TAB` | Window switcher (Rofi, same glass style) |
 | `SUPER + SHIFT + R` | Rofi launcher style changer |
 | `SUPER + I` | Web search (Rofi) |
 | `SUPER + A` | Webapp launcher (sites as `chrome --app` windows) |
@@ -197,12 +199,21 @@ Everything in `hyprland/.config/hypr/scripts/` and `rofi/.config/rofi/scripts/`,
 | `power-auto.sh` | Balanced by default, power-saver on battery at ≤30%, back to balanced when plugged in or above 35%; a manual pick sticks until the next transition. Critical "plug in" notification at ≤10% |
 | `ocr.sh` | Region select → Tesseract (tur+eng) → clipboard |
 | `wallSelect.sh` | Wallpaper picker with a resized-thumbnail cache, feeds Matugen |
-| `matugenMagick.sh` | Regenerates Rofi preview images and the GTK theme after a wallpaper change |
+| `matugenMagick.sh` | Regenerates Rofi preview images and the GTK theme, then runs `kitty-opacity.sh` and `sddm-sync.sh`, after a wallpaper change |
+| `kitty-opacity.sh` | Measures the wallpaper's bright regions and writes the lowest `background_opacity` (0.40–0.80) that keeps Kitty text at ≥4.5:1 contrast into `kitty/opacity.conf` |
 | `sddm-sync.sh` | Copies the Matugen SDDM config + a 1080p wallpaper to `/var/lib/silent-matugen` for the login screen (called by `matugenMagick.sh`) |
 | `waybarSelect.sh` | Waybar theme switcher |
 | `webapp.sh` (rofi) | Opens a site from `rofi/webapps.list` as its own `chrome --app` window |
 
 ## 📊 Waybar
+
+Default `tty` theme:
+
+```
+[workspaces][window title]            [clock + date]            [media · cpu · mem · wifi · vpn · volume · battery | filters · caffeine · profile · notifications · tray]
+```
+
+The `pills` theme (below) is kept in `themes/pills`:
 
 ```
 [launcher][workspaces + app icons][updates · weather · color picker]   [now playing][notifications][battery]   [cpu ▸ ram · temp · gpu][wifi · bt][volume ▸ mic · brightness][profile · caffeine][date][time][tray]
@@ -227,7 +238,7 @@ Everything in `hyprland/.config/hypr/scripts/` and `rofi/.config/rofi/scripts/`,
 Changing the wallpaper (via `waypaper`, the Rofi wallpaper picker, or `wallSelect.sh`) triggers Matugen, which reads `matugen/.config/matugen/config.toml` and regenerates every downstream template in one run:
 
 ```
-wallpaper ──▶ matugen ──▶ GTK 3/4 · Kitty · Rofi · Waybar · hyprlock · SDDM · starship · Obsidian
+wallpaper ──▶ matugen ──▶ GTK 3/4 · Kitty · Rofi · Waybar · swaync · wlogout · hyprlock · SDDM · starship · Obsidian
 ```
 
 **Login screen.** SDDM uses the [SilentSDDM](https://github.com/uiriansan/SilentSDDM) theme (AUR `sddm-silent-theme`). The greeter runs as the `sddm` user and can't read `$HOME`, so `sddm-sync.sh` copies the rendered config and wallpaper into the user-owned `/var/lib/silent-matugen`; `system/sddm/setup-sddm-theme.sh` (run once with sudo) creates that dir, installs `/etc/sddm.conf.d/10-silent-theme.conf`, and symlinks the theme's `configs/matugen.conf` and `backgrounds/matugen.jpg` to it. Only data lives there, never QML. Preview without logging out: `cd /usr/share/sddm/themes/silent && ./test.sh`.

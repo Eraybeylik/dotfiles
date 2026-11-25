@@ -1,11 +1,11 @@
 /* Importing matugen colors */
-@import '../waybar/colors.css';
+@import '../waybar/matugen/matugen-waybar.css';
 
 
 window {
     font-family: GeistMono Nerd Font Propo;
     font-size: 16pt;
-    color:  @foreground; /* text */
+    color:  @on_surface; /* text */
     background-color: @surface-alpha;
 
 } 
@@ -18,7 +18,7 @@ button {
     animation: gradient_f 20s ease-in infinite;
     transition: all 0.3s ease-in;
     box-shadow: 0 0 10px 2px transparent;
-    border-radius: 36px;
+    border-radius: 0;
     margin: 10px;
 }
 

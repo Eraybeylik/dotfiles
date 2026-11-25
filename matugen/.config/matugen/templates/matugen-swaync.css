@@ -13,3 +13,5 @@
 @define-color {{name}} {{value.default.hex}};
 <* endfor *>
 
+/* Wallpaper-tinted translucent panel (same recipe as waybar/rofi) */
+@define-color glass {{colors.primary_container.default.rgba | set_lightness: 14.0 | set_alpha: 0.78}};

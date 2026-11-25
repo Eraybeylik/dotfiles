@@ -294,7 +294,6 @@ require("keybinds")
 
 -- Float rules
 local floatMatches = {
-	{ name = "float-jome", title = "^(jome)$" },
 	{ name = "float-kvantum", class = "^(kvantummanager)$" },
 	{ name = "float-qt5ct", class = "^(qt5ct)$" },
 	{ name = "float-qt6ct", class = "^(qt6ct)$" },
@@ -303,7 +302,6 @@ local floatMatches = {
 	{ name = "float-pavucontrol", class = "^(pavucontrol)$" },
 	{ name = "float-qalculate", class = "^(qalculate-gtk)$" },
 	{ name = "float-blueman", class = "^(blueman-manager)$" },
-	{ name = "float-nm-applet", class = "^(nm-applet)$" },
 	{ name = "float-nm-editor", class = "^(nm-connection-editor)$" },
 	{ name = "float-polkit", class = "^(org\\.kde\\.polkit-kde-authentication-agent-1)$" },
 }
@@ -330,7 +328,7 @@ local opacityRules = {
 	{ name = "opacity-arduino", class = "^(Arduino IDE)$", opacity = "0.80 0.80" },
 	{ name = "opacity-warp", class = "^(dev\\.warp\\.Warp)$", opacity = "0.80 0.80" },
 	{ name = "opacity-obsidian", class = "^(obsidian)$", opacity = "0.80 0.80" },
-	{ name = "opacity-thunar", class = "^([Tt]hunar)$", opacity = "0.85 0.85" },
+	{ name = "opacity-thunar", class = "^([Tt]hunar)$", opacity = "0.92 0.92" },
 	{ name = "opacity-ark", class = "^(org\\.kde\\.ark)$", opacity = "0.80 0.80" },
 }
 
